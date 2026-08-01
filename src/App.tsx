@@ -573,9 +573,11 @@ function HeroCTA({ backdropBlur = false }: { backdropBlur?: boolean }) {
         }`,
         borderRadius: "8px",
         background: hover
-          ? "rgba(20,18,15,0.82)"
+          ? backdropBlur
+            ? "rgba(20,18,15,0.68)"
+            : "rgba(201,169,110,0.08)"
           : backdropBlur
-            ? "rgba(6,6,10,0.72)"
+            ? "rgba(6,6,10,0.56)"
             : "transparent",
         color: hover ? "rgba(240,236,227,0.95)" : "rgba(240,236,227,0.78)",
         fontSize: "12px",
@@ -649,7 +651,7 @@ function Hero() {
         beforeAlt="Client A before FitAlign"
         afterAlt="Client A after FitAlign"
         showLabels={false}
-        mobileHeight="clamp(410px, 52vh, 480px)"
+        mobileHeight="clamp(430px, 54vh, 500px)"
         mobileBeforeObjectPosition="42% bottom"
         mobileAfterObjectPosition="50% bottom"
       />
@@ -838,7 +840,7 @@ function Hero() {
                 style={{
                   position: "absolute",
                   left: "50%",
-                  top: "calc(50% + 80px)",
+                  top: "calc(50% + 90px)",
                   transform: "translate(-50%, -50%)",
                   zIndex: 3,
                   width: "calc(100% - 8px)",
@@ -898,7 +900,7 @@ function Hero() {
           position: "relative",
           zIndex: 10,
           width: "100%",
-          marginTop: isMobile ? "-42px" : 0,
+          marginTop: isMobile ? "-62px" : 0,
           padding: isMobile ? "0 0 38px" : "0 0 45px",
         }}
       >
@@ -908,7 +910,7 @@ function Hero() {
               position: "absolute",
               inset: 0,
               background: isMobile
-                ? "linear-gradient(180deg, rgba(6,6,10,0.84) 0%, rgba(6,6,10,0.74) 100%)"
+                ? "radial-gradient(ellipse at 58% 50%, rgba(3,3,7,0.56) 0%, rgba(8,8,12,0.28) 40%, transparent 85%), rgba(28,28,34,0.46)"
                 : "linear-gradient(180deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0.01) 100%)",
               borderTop: isMobile
                 ? "1px solid rgba(255,255,255,0.2)"
@@ -919,8 +921,8 @@ function Hero() {
               boxShadow: isMobile
                 ? "0 0 18px rgba(201,169,110,0.07), inset 0 1px 0 rgba(255,255,255,0.04)"
                 : "none",
-              backdropFilter: isMobile ? "blur(8px)" : "blur(2px)",
-              WebkitBackdropFilter: isMobile ? "blur(8px)" : "blur(2px)",
+              backdropFilter: isMobile ? "blur(3px)" : "blur(2px)",
+              WebkitBackdropFilter: isMobile ? "blur(3px)" : "blur(2px)",
             }}
           />
           <div
