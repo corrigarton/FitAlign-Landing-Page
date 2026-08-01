@@ -4,7 +4,6 @@ import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
-  base: '/fitalign/',
   plugins: [
     react(),
     tailwindcss(),
