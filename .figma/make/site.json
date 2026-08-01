@@ -1,0 +1,10 @@
+{
+  "description": "A premium landing page designed to convert visitors into students for a movement education course, featuring course info, login, and ecosystem access.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
