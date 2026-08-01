@@ -572,7 +572,11 @@ function HeroCTA({ backdropBlur = false }: { backdropBlur?: boolean }) {
           hover ? "rgba(201,169,110,0.7)" : "rgba(201,169,110,0.3)"
         }`,
         borderRadius: "8px",
-        background: hover ? "rgba(201,169,110,0.08)" : "transparent",
+        background: hover
+          ? "rgba(20,18,15,0.82)"
+          : backdropBlur
+            ? "rgba(6,6,10,0.72)"
+            : "transparent",
         color: hover ? "rgba(240,236,227,0.95)" : "rgba(240,236,227,0.78)",
         fontSize: "12px",
         fontWeight: 600,
@@ -834,8 +838,8 @@ function Hero() {
                 style={{
                   position: "absolute",
                   left: "50%",
-                  bottom: "clamp(88px, 12.5vh, 122px)",
-                  transform: "translateX(-50%)",
+                  top: "calc(50% + 80px)",
+                  transform: "translate(-50%, -50%)",
                   zIndex: 3,
                   width: "calc(100% - 8px)",
                   display: "flex",
@@ -904,7 +908,7 @@ function Hero() {
               position: "absolute",
               inset: 0,
               background: isMobile
-                ? "linear-gradient(180deg, rgba(255,255,255,0.075) 0%, rgba(255,255,255,0.035) 100%)"
+                ? "linear-gradient(180deg, rgba(6,6,10,0.84) 0%, rgba(6,6,10,0.74) 100%)"
                 : "linear-gradient(180deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0.01) 100%)",
               borderTop: isMobile
                 ? "1px solid rgba(255,255,255,0.2)"
@@ -912,8 +916,11 @@ function Hero() {
               borderBottom: isMobile
                 ? "1px solid rgba(255,255,255,0.14)"
                 : "1px solid rgba(255,255,255,0.05)",
-              backdropFilter: "blur(2px)",
-              WebkitBackdropFilter: "blur(2px)",
+              boxShadow: isMobile
+                ? "0 0 18px rgba(201,169,110,0.07), inset 0 1px 0 rgba(255,255,255,0.04)"
+                : "none",
+              backdropFilter: isMobile ? "blur(8px)" : "blur(2px)",
+              WebkitBackdropFilter: isMobile ? "blur(8px)" : "blur(2px)",
             }}
           />
           <div
