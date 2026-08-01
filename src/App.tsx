@@ -645,7 +645,7 @@ function Hero() {
         beforeAlt="Client A before FitAlign"
         afterAlt="Client A after FitAlign"
         showLabels={false}
-        mobileHeight="clamp(370px, 47vh, 440px)"
+        mobileHeight="clamp(410px, 52vh, 480px)"
         mobileBeforeObjectPosition="42% bottom"
         mobileAfterObjectPosition="50% bottom"
       />
@@ -730,7 +730,7 @@ function Hero() {
           width: "100%",
           margin: "0 auto",
           padding: isMobile
-            ? "74px 24px 0"
+            ? "94px 24px 0"
             : "88px clamp(32px, 4vw, 72px) 24px",
           gap: isMobile ? "0" : "clamp(40px, 5vw, 80px)",
           boxSizing: "border-box",
@@ -825,7 +825,7 @@ function Hero() {
                 position: "relative",
                 width: "100%",
                 maxWidth: "430px",
-                margin: "0 auto",
+                margin: "14px auto 0",
               }}
             >
               {heroPanel}
@@ -834,7 +834,7 @@ function Hero() {
                 style={{
                   position: "absolute",
                   left: "50%",
-                  bottom: "clamp(78px, 11vh, 112px)",
+                  bottom: "clamp(88px, 12.5vh, 122px)",
                   transform: "translateX(-50%)",
                   zIndex: 3,
                   width: "calc(100% - 8px)",
@@ -894,7 +894,7 @@ function Hero() {
           position: "relative",
           zIndex: 10,
           width: "100%",
-          marginTop: isMobile ? "18px" : 0,
+          marginTop: isMobile ? "-42px" : 0,
           padding: isMobile ? "0 0 38px" : "0 0 45px",
         }}
       >
