@@ -15,6 +15,35 @@
   .stat-dot {
     display: none !important;
   }
+
+  .section-shell p {
+    padding-inline: 8px;
+  }
+
+  .section-shell :is(h1, h2, h3) {
+    padding-inline: 8px;
+  }
+
+  .section-eyebrow,
+  .mobile-eyebrow {
+    padding-inline: 8px;
+  }
+
+  .section-shell :is([style*="border"], [style*="background"]) :is(p, h1, h2, h3) {
+    padding-inline: 0;
+  }
+
+  .section-shell :is([style*="border"], [style*="background"]) .section-eyebrow {
+    padding-inline: 0;
+  }
+
+  .mobile-body-copy {
+    padding-inline: 8px;
+  }
+
+  .mobile-heading {
+    padding-inline: 8px;
+  }
 }
 
 @keyframes fadeUp {

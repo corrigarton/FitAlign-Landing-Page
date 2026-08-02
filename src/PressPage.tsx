@@ -200,7 +200,7 @@ export default function PressPage() {
         style={{
           position: "relative",
           overflow: "hidden",
-          padding: isMobile ? "120px 20px 56px" : "156px 32px 80px",
+          padding: isMobile ? "120px 28px 56px" : "156px 32px 80px",
         }}
       >
         <div
@@ -217,7 +217,7 @@ export default function PressPage() {
 
         <div style={{ position: "relative", maxWidth: "1120px", margin: "0 auto" }}>
           <div
-            className="hero-intro press-intro-label"
+            className="hero-intro press-intro-label mobile-eyebrow"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -239,7 +239,7 @@ export default function PressPage() {
           </div>
 
           <h1
-            className="hero-intro press-intro-title"
+            className="hero-intro press-intro-title mobile-heading"
             style={{
               margin: 0,
               fontSize: isMobile ? "clamp(2.7rem, 13vw, 4.2rem)" : "clamp(4rem, 7vw, 6.6rem)",
@@ -253,7 +253,7 @@ export default function PressPage() {
           </h1>
 
           <p
-            className="hero-intro press-intro-copy"
+            className="hero-intro press-intro-copy mobile-body-copy"
             style={{
               maxWidth: "610px",
               margin: isMobile ? "22px 0 42px" : "28px 0 56px",

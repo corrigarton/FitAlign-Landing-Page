@@ -78,6 +78,7 @@ function Reveal({
 function SectionTag({ label }: { label: string }) {
   return (
     <div
+      className="section-eyebrow"
       style={{
         display: "flex",
         alignItems: "center",
@@ -182,10 +183,15 @@ function Section({
   children: ReactNode
   style?: React.CSSProperties
 }) {
+  const isMobile = useWindowWidth() < 768
+
   return (
     <section
+      className="section-shell"
       style={{
-        padding: "clamp(56px, 8vw, 96px) clamp(16px, 3vw, 32px)",
+        padding: isMobile
+          ? "clamp(56px, 8vw, 96px) 28px"
+          : "clamp(56px, 8vw, 96px) clamp(16px, 3vw, 32px)",
         ...style,
       }}
     >
@@ -634,28 +640,41 @@ function HeroCTA({
       style={{
         display: "inline-flex",
         alignItems: "center",
-        gap: light ? "6px" : "12px",
-        padding: light ? "16px 24px" : "16px 40px",
+        justifyContent: "center",
+        gap: light ? "11px" : "12px",
+        padding: light ? "15px 28px" : "16px 40px",
         border: `1px solid ${
-          hover || pressed ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.13)"
+          light
+            ? hover || pressed
+              ? "rgba(241,220,174,0.72)"
+              : "rgba(235,211,163,0.38)"
+            : hover || pressed
+              ? "rgba(255,255,255,0.2)"
+              : "rgba(255,255,255,0.13)"
         }`,
-        borderRadius: "12px",
-        background:
-          hover || pressed ? "rgba(10,10,14,0.96)" : "rgba(10,10,14,0.88)",
-        color: hover ? "rgba(240,236,227,1)" : "rgba(240,236,227,0.9)",
+        borderRadius: light ? "999px" : "12px",
+        background: light
+          ? hover || pressed
+            ? "linear-gradient(135deg, #d9bf87 0%, #caa96c 58%, #bc9657 100%)"
+            : "linear-gradient(135deg, #d2b77e 0%, #c5a367 58%, #b99154 100%)"
+          : hover || pressed
+            ? "rgba(10,10,14,0.96)"
+            : "rgba(10,10,14,0.88)",
+        color: light ? "#0a0a0e" : hover ? "rgba(240,236,227,1)" : "rgba(240,236,227,0.9)",
         fontSize: "12px",
         fontWeight: light ? 700 : 600,
-        letterSpacing: "0.24em",
+        letterSpacing: light ? "0.18em" : "0.24em",
         textTransform: "uppercase",
         whiteSpace: "nowrap",
         textDecoration: "none",
         fontFamily: "'DM Sans', system-ui, sans-serif",
-        backdropFilter: "blur(24px)",
-        WebkitBackdropFilter: "blur(24px)",
+        backdropFilter: light ? "none" : "blur(24px)",
+        WebkitBackdropFilter: light ? "none" : "blur(24px)",
         transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
         transform: pressed ? "scale(0.975)" : "scale(1)",
-        boxShadow:
-          "0 8px 32px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.035), inset 0 1px 0 rgba(255,255,255,0.07)",
+        boxShadow: light
+          ? "0 7px 18px rgba(0,0,0,0.28), 0 2px 8px rgba(201,169,110,0.1), inset 0 1px 0 rgba(255,255,255,0.22)"
+          : "0 8px 32px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.035), inset 0 1px 0 rgba(255,255,255,0.07)",
         cursor: "pointer",
       }}
     >
@@ -672,7 +691,7 @@ function HeroCTA({
       >
         <path
           d="M1 4.5h11M7.5 1l4 3.5-4 3.5"
-          stroke="rgba(201,169,110,0.9)"
+          stroke={light ? "#0a0a0e" : "rgba(201,169,110,0.9)"}
           strokeWidth="1.1"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -688,6 +707,13 @@ function Hero() {
   const isMobile = useWindowWidth() < 768
   const nytRowRef = useRef<HTMLDivElement>(null)
   const [nytRowInView, setNytRowInView] = useState(false)
+  const [scrollCueVisible, setScrollCueVisible] = useState(true)
+  useEffect(() => {
+    const updateScrollCue = () => setScrollCueVisible(window.scrollY < 16)
+    updateScrollCue()
+    window.addEventListener("scroll", updateScrollCue, { passive: true })
+    return () => window.removeEventListener("scroll", updateScrollCue)
+  }, [])
   useEffect(() => {
     const el = nytRowRef.current
     if (!el) return
@@ -807,7 +833,7 @@ function Hero() {
           width: "100%",
           margin: "0 auto",
           padding: isMobile
-            ? "94px 24px 0"
+            ? "94px 32px 0"
             : "88px clamp(32px, 4vw, 72px) 24px",
           gap: isMobile ? "0" : "clamp(40px, 5vw, 80px)",
           boxSizing: "border-box",
@@ -894,7 +920,7 @@ function Hero() {
               letterSpacing: "-0.01em",
             }}
           >
-            Unlock your full capacity.
+            Calibrate your system.
           </p>
 
           {/* On mobile: transformation goes here between tagline and description */}
@@ -912,7 +938,7 @@ function Hero() {
                 style={{
                   position: "absolute",
                   left: "50%",
-                  top: "calc(50% + 72px)",
+                  top: "calc(50% + 97px)",
                   transform: "translate(-50%, -50%)",
                   zIndex: 3,
                   width: "100%",
@@ -973,7 +999,7 @@ function Hero() {
           position: "relative",
           zIndex: 10,
           width: "100%",
-          marginTop: isMobile ? "-57px" : 0,
+          marginTop: isMobile ? "-47px" : 0,
           padding: isMobile ? "0 0 34px" : "0 0 45px",
         }}
       >
@@ -982,10 +1008,10 @@ function Hero() {
             position: "relative",
             width: isMobile ? "calc(100% - 32px)" : "100%",
             margin: isMobile ? "0 16px" : 0,
-            borderRadius: isMobile ? "12px" : 0,
+            borderRadius: isMobile ? "16px" : 0,
             overflow: "hidden",
             boxShadow: isMobile
-              ? "0 8px 32px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.04)"
+              ? "0 8px 48px rgba(0,0,0,0.5)"
               : "none",
           }}
         >
@@ -993,17 +1019,16 @@ function Hero() {
             style={{
               position: "absolute",
               inset: 0,
-              background: "rgba(10,10,14,0.96)",
-              border: isMobile ? "1px solid rgba(255,255,255,0.13)" : undefined,
+              background: isMobile ? "rgba(255,255,255,0.033)" : "rgba(10,10,14,0.96)",
+              border: isMobile ? "1px solid rgba(255,255,255,0.08)" : undefined,
               borderTop: isMobile ? undefined : "1px solid rgba(255,255,255,0.13)",
-              borderBottom: isMobile
-                ? undefined
-                : "1px solid rgba(255,255,255,0.13)",
-              borderRadius: isMobile ? "12px" : 0,
-              boxShadow:
-                "0 8px 32px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.07)",
-              backdropFilter: "blur(24px)",
-              WebkitBackdropFilter: "blur(24px)",
+              borderBottom: isMobile ? undefined : "1px solid rgba(255,255,255,0.13)",
+              borderRadius: isMobile ? "16px" : 0,
+              boxShadow: isMobile
+                ? "inset 0 1px 0 rgba(255,255,255,0.05)"
+                : "0 8px 32px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.07)",
+              backdropFilter: isMobile ? "blur(20px)" : "blur(24px)",
+              WebkitBackdropFilter: isMobile ? "blur(20px)" : "blur(24px)",
             }}
           />
           <div
@@ -1015,8 +1040,8 @@ function Hero() {
               alignItems: "center",
               justifyContent: "center",
               flexWrap: "wrap",
-              gap: isMobile ? "6px" : "0",
-              padding: isMobile ? "16px 20px" : "18px 24px",
+              gap: isMobile ? "4px" : "0",
+              padding: isMobile ? "13px 20px" : "18px 24px",
               opacity: nytRowInView ? 1 : 0,
               transform: nytRowInView ? "translateY(0)" : "translateY(20px)",
               filter: nytRowInView ? "blur(0)" : "blur(6px)",
@@ -1071,11 +1096,18 @@ function Hero() {
             position: "absolute",
             left: "50%",
             bottom: isMobile ? "2px" : "10px",
-            transform: "translateX(-50%)",
+            opacity: scrollCueVisible ? 1 : 0,
+            transform: scrollCueVisible
+              ? "translateX(-50%) translateY(0) scale(1)"
+              : "translateX(-50%) translateY(-10px) scale(0.94)",
             width: isMobile ? "52px" : "54px",
             height: isMobile ? "13px" : "16px",
-            filter: "drop-shadow(0 0 8px rgba(240,236,227,0.42))",
-            animation: "scrollPulse 2.8s ease-in-out infinite",
+            filter: scrollCueVisible
+              ? "drop-shadow(0 0 8px rgba(240,236,227,0.42)) blur(0)"
+              : "drop-shadow(0 0 0 rgba(240,236,227,0)) blur(5px)",
+            transition:
+              "opacity 700ms cubic-bezier(0.16,1,0.3,1), transform 850ms cubic-bezier(0.16,1,0.3,1), filter 700ms cubic-bezier(0.16,1,0.3,1)",
+            willChange: "opacity, transform, filter",
           }}
         >
           <svg
@@ -1084,11 +1116,12 @@ function Hero() {
             viewBox="0 0 132 36"
             fill="none"
             preserveAspectRatio="none"
+            style={{ animation: "scrollPulse 2.8s ease-in-out infinite" }}
           >
             <path
               d="M3 4L66 32L129 4"
               stroke="rgba(240,236,227,0.82)"
-              strokeWidth="1.4"
+              strokeWidth={isMobile ? "0.9" : "1.4"}
               strokeLinecap="round"
               strokeLinejoin="round"
             />
@@ -2844,7 +2877,8 @@ function MethodSection() {
               <div
                 style={{
                   display: "flex",
-                  gap: "24px",
+                  alignItems: "flex-start",
+                  gap: isMobile ? "18px" : "24px",
                   paddingBottom: "28px",
                   marginBottom: i < steps.length - 1 ? "28px" : 0,
                   borderBottom:
@@ -2855,10 +2889,12 @@ function MethodSection() {
               >
                 <div
                   style={{
-                    fontSize: "clamp(2rem, 3.5vw, 2.8rem)",
+                    fontSize: isMobile ? "1.75rem" : "clamp(2rem, 3.5vw, 2.8rem)",
                     fontFamily: "var(--font-display)",
-                    color: "rgba(201,169,110,0.22)",
-                    fontWeight: 400,
+                    color: isMobile
+                      ? "rgba(201,169,110,0.78)"
+                      : "rgba(201,169,110,0.22)",
+                    fontWeight: 300,
                     lineHeight: 1,
                     flexShrink: 0,
                     width: "2ch",
@@ -2867,13 +2903,14 @@ function MethodSection() {
                 >
                   {step.n}
                 </div>
-                <div style={{ paddingTop: "6px" }}>
+                <div style={{ paddingTop: isMobile ? 0 : "6px" }}>
                   <p
                     style={{
                       color: "#f0ece3",
                       fontWeight: 500,
                       marginBottom: "6px",
                       fontSize: "1rem",
+                      lineHeight: 1.5,
                       letterSpacing: "0.01em",
                     }}
                   >
@@ -2902,16 +2939,24 @@ function MethodSection() {
                 border: "1px solid rgba(201,169,110,0.15)",
                 borderRadius: "8px",
                 display: "flex",
-                flexDirection: "row",
+                flexDirection: isMobile ? "column" : "row",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: "10px",
-                flexWrap: "wrap",
+                gap: isMobile ? "8px" : "10px",
+                flexWrap: isMobile ? "nowrap" : "wrap",
               }}
             >
               {["Knowledge", "Experience", "Automatic Pattern"].map(
                 (item, i, arr) => (
-                  <span key={item} style={{ display: "contents" }}>
+                  <span
+                    key={item}
+                    style={{
+                      display: isMobile ? "flex" : "contents",
+                      flexDirection: isMobile ? "column" : undefined,
+                      alignItems: isMobile ? "center" : undefined,
+                      gap: isMobile ? "8px" : undefined,
+                    }}
+                  >
                     <span
                       style={{
                         fontSize: "12px",
@@ -2929,7 +2974,7 @@ function MethodSection() {
                           fontSize: "12px",
                         }}
                       >
-                        →
+                        {isMobile ? "↓" : "→"}
                       </span>
                     )}
                   </span>
