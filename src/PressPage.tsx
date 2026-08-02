@@ -205,6 +205,7 @@ export default function PressPage() {
       >
         <div
           aria-hidden="true"
+          className="hero-intro press-intro-glow"
           style={{
             position: "absolute",
             inset: 0,
@@ -216,6 +217,7 @@ export default function PressPage() {
 
         <div style={{ position: "relative", maxWidth: "1120px", margin: "0 auto" }}>
           <div
+            className="hero-intro press-intro-label"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -237,6 +239,7 @@ export default function PressPage() {
           </div>
 
           <h1
+            className="hero-intro press-intro-title"
             style={{
               margin: 0,
               fontSize: isMobile ? "clamp(2.7rem, 13vw, 4.2rem)" : "clamp(4rem, 7vw, 6.6rem)",
@@ -250,6 +253,7 @@ export default function PressPage() {
           </h1>
 
           <p
+            className="hero-intro press-intro-copy"
             style={{
               maxWidth: "610px",
               margin: isMobile ? "22px 0 42px" : "28px 0 56px",
@@ -263,6 +267,7 @@ export default function PressPage() {
           </p>
 
           <div
+            className="hero-intro press-intro-filters"
             style={{
               display: "flex",
               flexWrap: "wrap",
@@ -308,12 +313,16 @@ export default function PressPage() {
             ))}
           </div>
 
-          <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+          <div
+            className="hero-intro press-intro-list"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
+          >
             {visibleItems.map((item, index) => {
               const hovered = hoveredIndex === index
 
               return (
                 <a
+                  className="press-row-intro"
                   key={`${item.publication}-${item.title}`}
                   href={item.url}
                   target="_blank"
@@ -333,6 +342,7 @@ export default function PressPage() {
                     color: "inherit",
                     textDecoration: "none",
                     transition: "background 180ms ease",
+                    animationDelay: `${560 + Math.min(index, 8) * 45}ms`,
                   }}
                 >
                   <span

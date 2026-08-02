@@ -208,7 +208,9 @@ function BeforeAfterPanel({
   mobileAfterObjectPosition,
   mobileImageScale,
   mobileImageTranslateY,
+  mobileBeforeImageTranslateY,
   mobileImageTopCrop,
+  mobileBeforeImageTopCrop,
   mobileImageBottomCrop,
 }: {
   before: string
@@ -222,7 +224,9 @@ function BeforeAfterPanel({
   mobileAfterObjectPosition?: string
   mobileImageScale?: number
   mobileImageTranslateY?: string
+  mobileBeforeImageTranslateY?: string
   mobileImageTopCrop?: string
+  mobileBeforeImageTopCrop?: string
   mobileImageBottomCrop?: string
 }) {
   const w = useWindowWidth()
@@ -273,12 +277,18 @@ function BeforeAfterPanel({
                   ? mobileBeforeObjectPosition
                   : "bottom center",
               clipPath:
-                isMobile && (mobileImageTopCrop || mobileImageBottomCrop)
-                  ? `inset(${mobileImageTopCrop ?? 0} 0 ${mobileImageBottomCrop ?? 0} 0)`
+                isMobile &&
+                (mobileBeforeImageTopCrop ||
+                  mobileImageTopCrop ||
+                  mobileImageBottomCrop)
+                  ? `inset(${mobileBeforeImageTopCrop ?? mobileImageTopCrop ?? 0} 0 ${mobileImageBottomCrop ?? 0} 0)`
                   : undefined,
               transform:
-                isMobile && (mobileImageScale || mobileImageTranslateY)
-                  ? `translateY(${mobileImageTranslateY ?? 0}) scale(${mobileImageScale ?? 1})`
+                isMobile &&
+                (mobileImageScale ||
+                  mobileBeforeImageTranslateY ||
+                  mobileImageTranslateY)
+                  ? `translateY(${mobileBeforeImageTranslateY ?? mobileImageTranslateY ?? 0}) scale(${mobileImageScale ?? 1})`
                   : undefined,
               transformOrigin: "bottom center",
               display: "block",
@@ -403,6 +413,7 @@ export function Nav() {
 
   return (
     <header
+      className="nav-intro"
       style={{
         position: "fixed",
         top: 0,
@@ -417,7 +428,7 @@ export function Nav() {
         style={{
           maxWidth: "1100px",
           margin: "0 auto",
-          background: "rgba(10,10,14,0.96)",
+          background: isMobile ? "#0a0a0e" : "rgba(10,10,14,0.96)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
           borderTop: "1px solid rgba(255,255,255,0.13)",
@@ -539,9 +550,9 @@ export function Nav() {
             overflow: "hidden",
             maxHeight: menuOpen ? "360px" : "0",
             transition: "max-height 0.4s cubic-bezier(0.16,1,0.3,1)",
-            background: "rgba(12,12,16,0.88)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
+            background: "#0c0c10",
+            backdropFilter: "none",
+            WebkitBackdropFilter: "none",
             borderTop: "0px solid transparent",
             borderLeft: menuOpen
               ? "1px solid rgba(255,255,255,0.08)"
@@ -624,31 +635,14 @@ function HeroCTA({
         display: "inline-flex",
         alignItems: "center",
         gap: light ? "6px" : "12px",
-        padding: light ? "16px 17px" : "16px 40px",
-        border: `${light ? "0.5px" : "1px"} solid ${
-          light
-            ? hover
-              ? "rgba(255,255,255,0.42)"
-              : "rgba(255,255,255,0.3)"
-            : hover
-              ? "rgba(201,169,110,0.7)"
-              : "rgba(201,169,110,0.3)"
+        padding: light ? "16px 24px" : "16px 40px",
+        border: `1px solid ${
+          hover || pressed ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.13)"
         }`,
-        borderRadius: "8px",
-        background: light
-          ? hover || pressed
-            ? "rgba(6,6,10,0.74)"
-            : "rgba(6,6,10,0.64)"
-          : hover
-            ? "rgba(201,169,110,0.08)"
-            : "transparent",
-        color: light
-          ? hover
-            ? "rgba(255,255,255,1)"
-            : "rgba(255,255,255,0.9)"
-          : hover
-            ? "rgba(240,236,227,0.95)"
-            : "rgba(240,236,227,0.78)",
+        borderRadius: "12px",
+        background:
+          hover || pressed ? "rgba(10,10,14,0.96)" : "rgba(10,10,14,0.88)",
+        color: hover ? "rgba(240,236,227,1)" : "rgba(240,236,227,0.9)",
         fontSize: "12px",
         fontWeight: light ? 700 : 600,
         letterSpacing: "0.24em",
@@ -656,17 +650,12 @@ function HeroCTA({
         whiteSpace: "nowrap",
         textDecoration: "none",
         fontFamily: "'DM Sans', system-ui, sans-serif",
-        backdropFilter: light ? "blur(12px)" : undefined,
-        WebkitBackdropFilter: light
-          ? "blur(12px)"
-          : undefined,
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
         transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
         transform: pressed ? "scale(0.975)" : "scale(1)",
-        boxShadow: light
-          ? "0 8px 24px rgba(0,0,0,0.14)"
-          : hover
-            ? "0 0 28px rgba(201,169,110,0.1), inset 0 1px 0 rgba(201,169,110,0.1)"
-            : "none",
+        boxShadow:
+          "0 8px 32px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.035), inset 0 1px 0 rgba(255,255,255,0.07)",
         cursor: "pointer",
       }}
     >
@@ -683,7 +672,7 @@ function HeroCTA({
       >
         <path
           d="M1 4.5h11M7.5 1l4 3.5-4 3.5"
-          stroke={light ? "rgba(255,255,255,0.88)" : "rgba(201,169,110,0.9)"}
+          stroke="rgba(201,169,110,0.9)"
           strokeWidth="1.1"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -730,8 +719,10 @@ function Hero() {
         mobileBeforeObjectPosition="44% bottom"
         mobileAfterObjectPosition="52% bottom"
         mobileImageScale={0.95}
-        mobileImageTranslateY="-20px"
+        mobileImageTranslateY="-45px"
+        mobileBeforeImageTranslateY="-35px"
         mobileImageTopCrop="15px"
+        mobileBeforeImageTopCrop="0px"
         mobileImageBottomCrop="18px"
       />
     </div>
@@ -780,14 +771,15 @@ function Hero() {
 
       {/* Gold radial glow — shifts right on desktop to complement the left-aligned copy */}
       <div
+        className="hero-intro"
         style={{
           position: "absolute",
           inset: 0,
           pointerEvents: "none",
           zIndex: 1,
           background: isMobile
-            ? "radial-gradient(ellipse 80% 55% at 50% 44%, rgba(180,138,72,0.1) 0%, rgba(120,85,30,0.04) 45%, transparent 70%)"
-            : "radial-gradient(ellipse 70% 60% at 30% 50%, rgba(180,138,72,0.11) 0%, rgba(120,85,30,0.04) 50%, transparent 70%)",
+            ? "radial-gradient(ellipse 80% 55% at 50% 44%, rgba(160,119,58,0.08) 0%, rgba(105,72,24,0.03) 45%, transparent 70%)"
+            : "radial-gradient(ellipse 70% 60% at 30% 50%, rgba(160,119,58,0.09) 0%, rgba(105,72,24,0.03) 50%, transparent 70%)",
         }}
       />
       <div
@@ -830,11 +822,11 @@ function Hero() {
             flexDirection: "column",
             alignItems: isMobile ? "center" : "flex-start",
             textAlign: isMobile ? "center" : "left",
-            animation: "fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.1s both",
           }}
         >
           {/* Badge */}
           <div
+            className="hero-intro hero-intro-badge"
             style={{
               display: isMobile ? "none" : "inline-flex",
               alignItems: "center",
@@ -873,6 +865,7 @@ function Hero() {
 
           {/* Wordmark */}
           <h1
+            className="hero-intro hero-intro-title"
             style={{
               fontFamily: "'DM Sans', system-ui, sans-serif",
               fontSize: isMobile
@@ -889,6 +882,7 @@ function Hero() {
           </h1>
 
           <p
+            className="hero-intro hero-intro-tagline"
             style={{
               fontFamily: "'DM Sans', system-ui, sans-serif",
               fontSize: isMobile
@@ -934,6 +928,7 @@ function Hero() {
           {!isMobile && (
             <>
               <p
+                className="hero-intro hero-intro-copy"
                 style={{
                   fontFamily: "'DM Sans', system-ui, sans-serif",
                   color: "rgba(255,255,255,0.52)",
@@ -949,7 +944,7 @@ function Hero() {
                 ease, and control.
               </p>
 
-              <div style={{ marginTop: "36px" }}>
+              <div className="hero-intro hero-intro-cta" style={{ marginTop: "36px" }}>
                 <HeroCTA />
               </div>
             </>
@@ -982,25 +977,33 @@ function Hero() {
           padding: isMobile ? "0 0 34px" : "0 0 45px",
         }}
       >
-        <div style={{ position: "relative", width: "100%", marginLeft: 0 }}>
+        <div
+          style={{
+            position: "relative",
+            width: isMobile ? "calc(100% - 32px)" : "100%",
+            margin: isMobile ? "0 16px" : 0,
+            borderRadius: isMobile ? "12px" : 0,
+            overflow: "hidden",
+            boxShadow: isMobile
+              ? "0 8px 32px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.04)"
+              : "none",
+          }}
+        >
           <div
             style={{
               position: "absolute",
               inset: 0,
-              background: isMobile
-                ? "radial-gradient(ellipse at 58% 50%, rgba(22,22,24,0.48) 0%, rgba(26,26,28,0.24) 40%, transparent 85%), rgba(28,28,31,0.52)"
-                : "linear-gradient(180deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.022) 100%)",
-              borderTop: isMobile
-                ? "1px solid rgba(255,255,255,0.18)"
-                : "1px solid rgba(255,255,255,0.12)",
+              background: "rgba(10,10,14,0.96)",
+              border: isMobile ? "1px solid rgba(255,255,255,0.13)" : undefined,
+              borderTop: isMobile ? undefined : "1px solid rgba(255,255,255,0.13)",
               borderBottom: isMobile
-                ? "1px solid rgba(255,255,255,0.12)"
-                : "1px solid rgba(255,255,255,0.08)",
-              boxShadow: isMobile
-                ? "0 0 18px rgba(255,255,255,0.045), inset 0 1px 0 rgba(255,255,255,0.04)"
-                : "none",
-              backdropFilter: isMobile ? "blur(3px)" : "blur(2px)",
-              WebkitBackdropFilter: isMobile ? "blur(3px)" : "blur(2px)",
+                ? undefined
+                : "1px solid rgba(255,255,255,0.13)",
+              borderRadius: isMobile ? "12px" : 0,
+              boxShadow:
+                "0 8px 32px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.07)",
+              backdropFilter: "blur(24px)",
+              WebkitBackdropFilter: "blur(24px)",
             }}
           />
           <div
@@ -1032,9 +1035,9 @@ function Hero() {
               >
                 <span
                   style={{
-                    fontSize: isMobile ? "12px" : "13px",
-                    letterSpacing: isMobile ? "0.1em" : "0.18em",
-                    textTransform: "uppercase",
+                    fontSize: "13px",
+                    letterSpacing: isMobile ? "0.06em" : "0.18em",
+                    textTransform: isMobile ? "none" : "uppercase",
                     color: isMobile
                       ? "rgba(240,236,227,0.82)"
                       : "rgba(240,236,227,0.62)",
@@ -1071,7 +1074,7 @@ function Hero() {
             transform: "translateX(-50%)",
             width: isMobile ? "52px" : "54px",
             height: isMobile ? "13px" : "16px",
-            filter: "drop-shadow(0 0 8px rgba(201,169,110,0.72))",
+            filter: "drop-shadow(0 0 8px rgba(240,236,227,0.42))",
             animation: "scrollPulse 2.8s ease-in-out infinite",
           }}
         >
@@ -1084,7 +1087,7 @@ function Hero() {
           >
             <path
               d="M3 4L66 32L129 4"
-              stroke="rgba(201,169,110,0.9)"
+              stroke="rgba(240,236,227,0.82)"
               strokeWidth="1.4"
               strokeLinecap="round"
               strokeLinejoin="round"

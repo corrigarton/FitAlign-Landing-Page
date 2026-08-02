@@ -46,6 +46,65 @@
   }
 }
 
+@keyframes heroReveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.985);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes navReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.99);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.nav-intro {
+  animation: navReveal 800ms cubic-bezier(0.16, 1, 0.3, 1) 80ms both;
+}
+
+.hero-intro {
+  animation: heroReveal 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-intro-badge { animation-delay: 140ms; }
+.hero-intro-title { animation-delay: 210ms; }
+.hero-intro-tagline { animation-delay: 300ms; }
+.hero-intro-copy { animation-delay: 410ms; }
+.hero-intro-cta { animation-delay: 500ms; }
+
+.press-intro-glow { animation-delay: 80ms; }
+.press-intro-label { animation-delay: 150ms; }
+.press-intro-title { animation-delay: 230ms; }
+.press-intro-copy { animation-delay: 320ms; }
+.press-intro-filters { animation-delay: 410ms; }
+.press-intro-list { animation-delay: 500ms; }
+
+.press-row-intro {
+  animation: heroReveal 750ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-intro,
+  .hero-intro,
+  .press-row-intro {
+    animation: none !important;
+  }
+}
+
 @keyframes lineGrow {
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
@@ -57,6 +116,7 @@
 
 html {
   scroll-behavior: smooth;
+  background: #050507;
 }
 
 body {
