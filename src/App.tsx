@@ -4,11 +4,15 @@ import clientBBefore from "./imports/client_B-_before.png"
 import clientBAfter from "./imports/client_B-after.png"
 import clientABefore from "./imports/Client_A_-_Before.png"
 import clientAAfter from "./imports/client_A_-_after.png"
+import clientAHeroBefore from "./imports/client-a-before-hero.png"
+import clientAHeroAfter from "./imports/client-a-after-hero.png"
 import logoImg from "./imports/bd63982f-fc2a-4e6e-88e1-ab0ae24e1450.png"
 import michaelleImg from "./imports/michaelle_-_Copy-1.jpg"
 import tomMyersImg from "./imports/image-26.png"
 import maryBondImg from "./imports/mary_bond.jpg"
 import kathleenPorterImg from "./imports/Kathleen-Porter-.jpg"
+
+const appBaseUrl = import.meta.env.BASE_URL
 
 // ─── Hooks ────────────────────────────────────────────────────────────────────
 
@@ -198,18 +202,28 @@ function BeforeAfterPanel({
   beforeAlt,
   afterAlt,
   showLabels = true,
+  showDivider = true,
   mobileHeight,
   mobileBeforeObjectPosition,
   mobileAfterObjectPosition,
+  mobileImageScale,
+  mobileImageTranslateY,
+  mobileImageTopCrop,
+  mobileImageBottomCrop,
 }: {
   before: string
   after: string
   beforeAlt: string
   afterAlt: string
   showLabels?: boolean
+  showDivider?: boolean
   mobileHeight?: string
   mobileBeforeObjectPosition?: string
   mobileAfterObjectPosition?: string
+  mobileImageScale?: number
+  mobileImageTranslateY?: string
+  mobileImageTopCrop?: string
+  mobileImageBottomCrop?: string
 }) {
   const w = useWindowWidth()
   const isMobile = w < 768
@@ -258,6 +272,15 @@ function BeforeAfterPanel({
                 isMobile && mobileBeforeObjectPosition
                   ? mobileBeforeObjectPosition
                   : "bottom center",
+              clipPath:
+                isMobile && (mobileImageTopCrop || mobileImageBottomCrop)
+                  ? `inset(${mobileImageTopCrop ?? 0} 0 ${mobileImageBottomCrop ?? 0} 0)`
+                  : undefined,
+              transform:
+                isMobile && (mobileImageScale || mobileImageTranslateY)
+                  ? `translateY(${mobileImageTranslateY ?? 0}) scale(${mobileImageScale ?? 1})`
+                  : undefined,
+              transformOrigin: "bottom center",
               display: "block",
             }}
           />
@@ -267,10 +290,11 @@ function BeforeAfterPanel({
       {/* Vertical divider */}
       <div
         style={{
-          width: "1px",
+          width: showDivider ? "1px" : 0,
           flexShrink: 0,
-          background:
-            "linear-gradient(to bottom, transparent 0%, rgba(201,169,110,0.5) 12%, rgba(201,169,110,0.5) 88%, transparent 100%)",
+          background: showDivider
+            ? "linear-gradient(to bottom, transparent 0%, rgba(201,169,110,0.5) 12%, rgba(201,169,110,0.5) 88%, transparent 100%)"
+            : "none",
         }}
       />
 
@@ -304,6 +328,15 @@ function BeforeAfterPanel({
                 isMobile && mobileAfterObjectPosition
                   ? mobileAfterObjectPosition
                   : "bottom center",
+              clipPath:
+                isMobile && (mobileImageTopCrop || mobileImageBottomCrop)
+                  ? `inset(${mobileImageTopCrop ?? 0} 0 ${mobileImageBottomCrop ?? 0} 0)`
+                  : undefined,
+              transform:
+                isMobile && (mobileImageScale || mobileImageTranslateY)
+                  ? `translateY(${mobileImageTranslateY ?? 0}) scale(${mobileImageScale ?? 1})`
+                  : undefined,
+              transformOrigin: "bottom center",
               display: "block",
             }}
           />
@@ -350,7 +383,7 @@ function NavLink({
   )
 }
 
-function Nav() {
+export function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const w = useWindowWidth()
@@ -412,7 +445,7 @@ function Nav() {
             justifyContent: "space-between",
           }}
         >
-          <a href="#" style={{ textDecoration: "none" }}>
+          <a href={appBaseUrl} style={{ textDecoration: "none" }}>
             <span
               style={{
                 fontFamily: "'DM Sans', system-ui, sans-serif",
@@ -428,9 +461,14 @@ function Nav() {
 
           {!isMobile && (
             <nav style={{ display: "flex", alignItems: "center", gap: "36px" }}>
-              {["Studio", "Workshops", "Teacher Training"].map((l) => (
-                <NavLink key={l} href="#">
-                  {l}
+              {[
+                { label: "Studio", href: "#" },
+                { label: "Workshops", href: "#" },
+                { label: "Teach", href: "#" },
+                { label: "Press", href: `${appBaseUrl}press` },
+              ].map((item) => (
+                <NavLink key={item.label} href={item.href}>
+                  {item.label}
                 </NavLink>
               ))}
             </nav>
@@ -526,10 +564,16 @@ function Nav() {
               gap: "0",
             }}
           >
-            {["Studio", "Workshops", "Teacher Training", "Login"].map((l) => (
+            {[
+              { label: "Studio", href: "#" },
+              { label: "Workshops", href: "#" },
+              { label: "Teach", href: "#" },
+              { label: "Press", href: `${appBaseUrl}press` },
+              { label: "Login", href: "#" },
+            ].map((item) => (
               <a
-                key={l}
-                href="#"
+                key={item.label}
+                href={item.href}
                 onClick={() => setMenuOpen(false)}
                 style={{
                   fontSize: "15px",
@@ -541,7 +585,7 @@ function Nav() {
                   borderBottom: "1px solid rgba(255,255,255,0.05)",
                 }}
               >
-                {l}
+                {item.label}
               </a>
             ))}
             <div style={{ marginTop: "24px" }}>
@@ -556,47 +600,77 @@ function Nav() {
 
 // ─── HERO CTA ─────────────────────────────────────────────────────────────────
 
-function HeroCTA({ backdropBlur = false }: { backdropBlur?: boolean }) {
+function HeroCTA({
+  light = false,
+  label = "Start FitAlign Online",
+}: {
+  light?: boolean
+  label?: string
+}) {
   const [hover, setHover] = useState(false)
+  const [pressed, setPressed] = useState(false)
   return (
     <a
       href="#course"
       onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      onMouseLeave={() => {
+        setHover(false)
+        setPressed(false)
+      }}
+      onPointerDown={() => setPressed(true)}
+      onPointerUp={() => setPressed(false)}
+      onPointerCancel={() => setPressed(false)}
       style={{
         display: "inline-flex",
         alignItems: "center",
-        gap: "12px",
-        padding: "16px 40px",
-        border: `1px solid ${
-          hover ? "rgba(201,169,110,0.7)" : "rgba(201,169,110,0.3)"
+        gap: light ? "6px" : "12px",
+        padding: light ? "16px 17px" : "16px 40px",
+        border: `${light ? "0.5px" : "1px"} solid ${
+          light
+            ? hover
+              ? "rgba(255,255,255,0.42)"
+              : "rgba(255,255,255,0.3)"
+            : hover
+              ? "rgba(201,169,110,0.7)"
+              : "rgba(201,169,110,0.3)"
         }`,
         borderRadius: "8px",
-        background: hover
-          ? backdropBlur
-            ? "rgba(20,18,15,0.68)"
-            : "rgba(201,169,110,0.08)"
-          : backdropBlur
-            ? "rgba(6,6,10,0.56)"
+        background: light
+          ? hover || pressed
+            ? "rgba(6,6,10,0.74)"
+            : "rgba(6,6,10,0.64)"
+          : hover
+            ? "rgba(201,169,110,0.08)"
             : "transparent",
-        color: hover ? "rgba(240,236,227,0.95)" : "rgba(240,236,227,0.78)",
+        color: light
+          ? hover
+            ? "rgba(255,255,255,1)"
+            : "rgba(255,255,255,0.9)"
+          : hover
+            ? "rgba(240,236,227,0.95)"
+            : "rgba(240,236,227,0.78)",
         fontSize: "12px",
-        fontWeight: 600,
+        fontWeight: light ? 700 : 600,
         letterSpacing: "0.24em",
         textTransform: "uppercase",
         whiteSpace: "nowrap",
         textDecoration: "none",
         fontFamily: "'DM Sans', system-ui, sans-serif",
-        backdropFilter: backdropBlur ? "blur(10px)" : undefined,
-        WebkitBackdropFilter: backdropBlur ? "blur(10px)" : undefined,
+        backdropFilter: light ? "blur(12px)" : undefined,
+        WebkitBackdropFilter: light
+          ? "blur(12px)"
+          : undefined,
         transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
-        boxShadow: hover
-          ? "0 0 28px rgba(201,169,110,0.1), inset 0 1px 0 rgba(201,169,110,0.1)"
-          : "none",
+        transform: pressed ? "scale(0.975)" : "scale(1)",
+        boxShadow: light
+          ? "0 8px 24px rgba(0,0,0,0.14)"
+          : hover
+            ? "0 0 28px rgba(201,169,110,0.1), inset 0 1px 0 rgba(201,169,110,0.1)"
+            : "none",
         cursor: "pointer",
       }}
     >
-      Start FitAlign Online
+      {label}
       <svg
         width="13"
         height="9"
@@ -604,12 +678,12 @@ function HeroCTA({ backdropBlur = false }: { backdropBlur?: boolean }) {
         fill="none"
         style={{
           transition: "transform 0.4s cubic-bezier(0.16,1,0.3,1)",
-          transform: hover ? "translateX(3px)" : "translateX(0)",
+          transform: hover || pressed ? "translateX(3px)" : "translateX(0)",
         }}
       >
         <path
           d="M1 4.5h11M7.5 1l4 3.5-4 3.5"
-          stroke="rgba(201,169,110,0.9)"
+          stroke={light ? "rgba(255,255,255,0.88)" : "rgba(201,169,110,0.9)"}
           strokeWidth="1.1"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -646,14 +720,19 @@ function Hero() {
       }}
     >
       <BeforeAfterPanel
-        before={clientABefore}
-        after={clientAAfter}
+        before={clientAHeroBefore}
+        after={clientAHeroAfter}
         beforeAlt="Client A before FitAlign"
         afterAlt="Client A after FitAlign"
         showLabels={false}
-        mobileHeight="clamp(430px, 54vh, 500px)"
-        mobileBeforeObjectPosition="42% bottom"
-        mobileAfterObjectPosition="50% bottom"
+        showDivider={false}
+        mobileHeight="clamp(430px, 55vh, 510px)"
+        mobileBeforeObjectPosition="44% bottom"
+        mobileAfterObjectPosition="52% bottom"
+        mobileImageScale={0.95}
+        mobileImageTranslateY="-20px"
+        mobileImageTopCrop="15px"
+        mobileImageBottomCrop="18px"
       />
     </div>
   )
@@ -668,7 +747,7 @@ function Hero() {
           flexDirection: "column",
           background: "#06060a",
           overflow: "hidden",
-          padding: 0,
+          padding: isMobile ? "0 0 100px" : 0,
         }}
       >
       {/* Noise texture */}
@@ -757,7 +836,7 @@ function Hero() {
           {/* Badge */}
           <div
             style={{
-              display: "inline-flex",
+              display: isMobile ? "none" : "inline-flex",
               alignItems: "center",
               gap: "8px",
               marginBottom: isMobile ? "10px" : "20px",
@@ -813,7 +892,7 @@ function Hero() {
             style={{
               fontFamily: "'DM Sans', system-ui, sans-serif",
               fontSize: isMobile
-                ? "clamp(1.1rem, 4.2vw, 1.4rem)"
+                ? "clamp(1.3rem, 5.2vw, 1.65rem)"
                 : "clamp(1.6rem, 2.1vw, 2rem)",
               fontWeight: 500,
               color: "rgba(240,236,227,0.72)",
@@ -821,7 +900,7 @@ function Hero() {
               letterSpacing: "-0.01em",
             }}
           >
-            Access your full capacity.
+            Unlock your full capacity.
           </p>
 
           {/* On mobile: transformation goes here between tagline and description */}
@@ -831,24 +910,23 @@ function Hero() {
                 position: "relative",
                 width: "100%",
                 maxWidth: "430px",
-                margin: "14px auto 0",
+                margin: "8px auto 0",
               }}
             >
               {heroPanel}
               <div
-                className="hero-mobile-cta-overlay"
                 style={{
                   position: "absolute",
                   left: "50%",
-                  top: "calc(50% + 90px)",
+                  top: "calc(50% + 72px)",
                   transform: "translate(-50%, -50%)",
                   zIndex: 3,
-                  width: "calc(100% - 8px)",
+                  width: "100%",
                   display: "flex",
                   justifyContent: "center",
                 }}
               >
-                <HeroCTA backdropBlur />
+                <HeroCTA light label="Apply Now" />
               </div>
             </div>
           )}
@@ -900,8 +978,8 @@ function Hero() {
           position: "relative",
           zIndex: 10,
           width: "100%",
-          marginTop: isMobile ? "-62px" : 0,
-          padding: isMobile ? "0 0 38px" : "0 0 45px",
+          marginTop: isMobile ? "-57px" : 0,
+          padding: isMobile ? "0 0 34px" : "0 0 45px",
         }}
       >
         <div style={{ position: "relative", width: "100%", marginLeft: 0 }}>
@@ -910,16 +988,16 @@ function Hero() {
               position: "absolute",
               inset: 0,
               background: isMobile
-                ? "radial-gradient(ellipse at 58% 50%, rgba(3,3,7,0.56) 0%, rgba(8,8,12,0.28) 40%, transparent 85%), rgba(28,28,34,0.46)"
-                : "linear-gradient(180deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0.01) 100%)",
+                ? "radial-gradient(ellipse at 58% 50%, rgba(22,22,24,0.48) 0%, rgba(26,26,28,0.24) 40%, transparent 85%), rgba(28,28,31,0.52)"
+                : "linear-gradient(180deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.022) 100%)",
               borderTop: isMobile
-                ? "1px solid rgba(255,255,255,0.2)"
-                : "1px solid rgba(255,255,255,0.08)",
+                ? "1px solid rgba(255,255,255,0.18)"
+                : "1px solid rgba(255,255,255,0.12)",
               borderBottom: isMobile
-                ? "1px solid rgba(255,255,255,0.14)"
-                : "1px solid rgba(255,255,255,0.05)",
+                ? "1px solid rgba(255,255,255,0.12)"
+                : "1px solid rgba(255,255,255,0.08)",
               boxShadow: isMobile
-                ? "0 0 18px rgba(201,169,110,0.07), inset 0 1px 0 rgba(255,255,255,0.04)"
+                ? "0 0 18px rgba(255,255,255,0.045), inset 0 1px 0 rgba(255,255,255,0.04)"
                 : "none",
               backdropFilter: isMobile ? "blur(3px)" : "blur(2px)",
               WebkitBackdropFilter: isMobile ? "blur(3px)" : "blur(2px)",
@@ -958,8 +1036,8 @@ function Hero() {
                     letterSpacing: isMobile ? "0.1em" : "0.18em",
                     textTransform: "uppercase",
                     color: isMobile
-                      ? "rgba(255,255,255,0.78)"
-                      : "rgba(240,236,227,0.5)",
+                      ? "rgba(240,236,227,0.82)"
+                      : "rgba(240,236,227,0.62)",
                     fontFamily: "'DM Sans', system-ui, sans-serif",
                     whiteSpace: isMobile ? "nowrap" : "normal",
                   }}
@@ -991,9 +1069,9 @@ function Hero() {
             left: "50%",
             bottom: isMobile ? "2px" : "10px",
             transform: "translateX(-50%)",
-            width: isMobile ? "40px" : "54px",
+            width: isMobile ? "52px" : "54px",
             height: isMobile ? "13px" : "16px",
-            filter: "drop-shadow(0 0 7px rgba(201,169,110,0.58))",
+            filter: "drop-shadow(0 0 8px rgba(201,169,110,0.72))",
             animation: "scrollPulse 2.8s ease-in-out infinite",
           }}
         >
@@ -1006,7 +1084,7 @@ function Hero() {
           >
             <path
               d="M3 4L66 32L129 4"
-              stroke="rgba(201,169,110,0.78)"
+              stroke="rgba(201,169,110,0.9)"
               strokeWidth="1.4"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -1017,31 +1095,6 @@ function Hero() {
 
       </section>
 
-      {isMobile && (
-        <section
-          style={{
-            background: "#06060a",
-            padding: "28px 24px 32px",
-            textAlign: "center",
-          }}
-        >
-          <p
-            style={{
-              fontFamily: "'DM Sans', system-ui, sans-serif",
-              color: "rgba(255,255,255,0.58)",
-              fontSize: "15px",
-              lineHeight: 1.68,
-              maxWidth: "360px",
-              margin: "0 auto",
-              letterSpacing: "0.01em",
-            }}
-          >
-            From elite performance to lifelong mobility, <br />
-            FitAlign helps people move with greater power, <br />
-            ease, and control.
-          </p>
-        </section>
-      )}
     </>
   )
 }
@@ -3634,7 +3687,7 @@ function FinalCTASection() {
 
 // ─── FOOTER ───────────────────────────────────────────────────────────────────
 
-function Footer() {
+export function Footer() {
   const [hovered, setHovered] = useState<string | null>(null)
 
   const FooterLink = ({
