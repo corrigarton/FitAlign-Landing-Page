@@ -1735,7 +1735,9 @@ function FoundationsSection() {
   const [visible, setVisible] = useState(true)
   const isMobile = useWindowWidth() < 768
 
-  const tabs = ["BUILT-IN STABILITY", "HOW PATTERNS FORM", "Why Fixes Fail"]
+  const tabs = isMobile
+    ? ["STABILITY", "COMPENSATION", "Why Fixes Fail"]
+    : ["BUILT-IN STABILITY", "HOW PATTERNS FORM", "Why Fixes Fail"]
 
   const switchTo = (i: number) => {
     if (i === active) return
@@ -1749,9 +1751,9 @@ function FoundationsSection() {
   const panels = [
     {
       category: "A WHOLE-BODY PROCESS",
-      headline: "You're never really standing still.",
+      headline: "Standing isn't passive.",
       body: [
-        "Your muscles make constant, automatic corrections to keep you upright.",
+        "Your body is held upright by hundreds of muscles making tiny, automatic adjustments.",
       ],
       callout: "",
     },
@@ -1778,11 +1780,10 @@ function FoundationsSection() {
     "Uneven joint loading",
     "Persistent pain",
   ]
-  const builtIn = [
-    "Redistributes weight",
-    "Automatic postural adjustment",
-    "Coordinated muscle activation",
-    "Responsive dynamic stability",
+  const stabilityCascade = [
+    "Muscles pull in different directions",
+    "The forces balance",
+    "Your body stays upright",
   ]
   const approaches = [
     {
@@ -1876,7 +1877,9 @@ function FoundationsSection() {
           {/* Left — text */}
           <div
             style={{
-              padding: "clamp(28px, 5vw, 52px)",
+              padding: isMobile
+                ? "20px clamp(28px, 5vw, 52px)"
+                : "clamp(28px, 5vw, 52px)",
               borderRight: isMobile
                 ? "none"
                 : "1px solid rgba(255,255,255,0.07)",
@@ -1915,7 +1918,8 @@ function FoundationsSection() {
                   color: "rgba(240,236,227,0.65)",
                   lineHeight: 1.85,
                   fontSize: "1rem",
-                  marginBottom: i < panel.body.length - 1 ? "14px" : "24px",
+                  marginBottom:
+                    i < panel.body.length - 1 ? "14px" : isMobile ? 0 : "24px",
                 }}
               >
                 {para}
@@ -1948,59 +1952,48 @@ function FoundationsSection() {
           <div
             style={{
               padding: isMobile
-                ? "clamp(28px, 5vw, 52px) clamp(28px, 5vw, 52px) clamp(14px, 2.5vw, 26px)"
+                ? "20px clamp(28px, 5vw, 52px) 12px"
                 : "clamp(28px, 5vw, 52px)",
             }}
           >
             {active === 0 && (
-              <div>
-                <p
-                  style={{
-                    fontSize: "12px",
-                    letterSpacing: "0.28em",
-                    textTransform: "uppercase",
-                    color: "rgba(240,236,227,0.35)",
-                    marginBottom: "20px",
-                  }}
-                >
-                  Built-in capabilities
-                </p>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  {builtIn.map((item, i) => (
-                    <div
-                      key={item}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minHeight: "100%",
+                  textAlign: "center",
+                }}
+              >
+                {stabilityCascade.map((item, i) => (
+                  <div key={item}>
+                    <p
                       style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "14px",
-                        padding: "13px 0",
-                        borderBottom:
-                          i < builtIn.length - 1
-                            ? "1px solid rgba(255,255,255,0.05)"
-                            : "none",
+                        color: "rgba(240,236,227,0.85)",
+                        fontSize: "clamp(1rem, 1.8vw, 1.2rem)",
+                        fontWeight: 600,
+                        lineHeight: 1.45,
                       }}
                     >
+                      {item}
+                    </p>
+                    {i < stabilityCascade.length - 1 && (
                       <div
+                        aria-hidden="true"
                         style={{
-                          width: "6px",
-                          height: "6px",
-                          borderRadius: "50%",
-                          flexShrink: 0,
-                          border: "1px solid rgba(201,169,110,0.5)",
-                          background: "rgba(201,169,110,0.12)",
-                        }}
-                      />
-                      <span
-                        style={{
-                          color: "rgba(240,236,227,0.72)",
-                          fontSize: "16px",
+                          color: "#c9a96e",
+                          fontSize: "22px",
+                          lineHeight: 1,
+                          padding: "14px 0",
                         }}
                       >
-                        {item}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                        ↓
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             )}
 
@@ -3902,7 +3895,6 @@ export default function App() {
       <Nav />
       <Hero />
       <ClientBSection />
-      <StretchingSection />
       <FoundationsSection />
       <Section>
         <div style={{ textAlign: "center", padding: "8px 0" }}>
@@ -3924,6 +3916,7 @@ export default function App() {
         </div>
       </Section>
       <ClientASection />
+      <StretchingSection />
       <MethodSection />
       <TestimonialSection />
       <AboutSection />
