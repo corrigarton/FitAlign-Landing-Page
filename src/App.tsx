@@ -1827,12 +1827,16 @@ function FoundationsSection() {
         {/* Tab bar */}
         <div
           style={{
-            padding: "clamp(18px, 2.5vw, 26px) clamp(28px, 5vw, 48px)",
+            padding: isMobile
+              ? "12px"
+              : "clamp(18px, 2.5vw, 26px) clamp(28px, 5vw, 48px)",
             borderBottom: "1px solid rgba(255,255,255,0.07)",
-            display: "flex",
+            display: isMobile ? "grid" : "flex",
+            gridTemplateColumns: isMobile ? "repeat(3, minmax(0, 1fr))" : undefined,
             alignItems: "center",
-            gap: "8px",
-            flexWrap: "wrap",
+            gap: isMobile ? "0" : "8px",
+            flexWrap: isMobile ? undefined : "wrap",
+            background: isMobile ? "rgba(255,255,255,0.018)" : undefined,
           }}
         >
           {tabs.map((tab, i) => (
@@ -1840,23 +1844,37 @@ function FoundationsSection() {
               key={tab}
               onClick={() => switchTo(i)}
               style={{
-                padding: "7px 17px",
+                position: "relative",
+                padding: isMobile ? "13px 3px 14px" : "7px 17px",
                 border: `1px solid ${
-                  i === active
+                  isMobile
+                    ? "transparent"
+                    : i === active
                     ? "rgba(201,169,110,0.55)"
                     : "rgba(255,255,255,0.1)"
                 }`,
-                background:
-                  i === active ? "rgba(201,169,110,0.09)" : "transparent",
+                borderLeft: isMobile && i > 0
+                  ? "1px solid rgba(255,255,255,0.07)"
+                  : undefined,
+                borderRadius: isMobile ? "7px" : "100px",
+                background: i === active
+                  ? isMobile
+                    ? "linear-gradient(180deg, rgba(201,169,110,0.1), rgba(201,169,110,0.035))"
+                    : "rgba(201,169,110,0.09)"
+                  : "transparent",
                 color: i === active ? "#c9a96e" : "rgba(240,236,227,0.42)",
-                fontSize: "12px",
-                letterSpacing: "0.14em",
+                fontSize: isMobile ? "11.5px" : "12px",
+                letterSpacing: isMobile ? "0.07em" : "0.14em",
                 textTransform: "uppercase",
-                borderRadius: "100px",
                 cursor: "pointer",
                 transition: "all 0.22s ease",
                 fontFamily: "'DM Sans', system-ui, sans-serif",
                 fontWeight: i === active ? 600 : 400,
+                whiteSpace: "nowrap",
+                boxShadow:
+                  isMobile && i === active
+                    ? "inset 0 -1px 0 rgba(201,169,110,0.8)"
+                    : "none",
               }}
             >
               {tab}
@@ -3108,8 +3126,8 @@ function AboutSection() {
         </p>
         <p style={{ color: "rgba(240,236,227,0.68)", lineHeight: 1.88 }}>
           Through decades of studying anatomy, breathing, fascia, posture,
-          massage, and human movement — and working directly with thousands of
-          students and clients — she developed a method for restoring alignment
+          massage, and human movement &mdash; and working directly with thousands of
+          students and clients &mdash; she developed a method for restoring alignment
           through movement rather than forcing the body into static positions.
         </p>
       </Reveal>
@@ -3208,8 +3226,35 @@ function AboutSection() {
     return (
       <Section>
         {headerBlock}
+        <Reveal delay={100}>
+          <p
+            style={{
+              color: "rgba(240,236,227,0.68)",
+              lineHeight: 1.88,
+              marginBottom: "24px",
+            }}
+          >
+            Michaelle Edwards began studying yoga at 18 under Swami Satchidananda.
+            After experiencing injury and instability within her own practice, she
+            began questioning whether commonly taught movements reflected the
+            body's natural design.
+          </p>
+        </Reveal>
         {photoBlock}
-        {bioBlock}
+        <Reveal delay={120}>
+          <p
+            style={{
+              color: "rgba(240,236,227,0.68)",
+              lineHeight: 1.88,
+              marginBottom: "24px",
+            }}
+          >
+            Through decades of studying anatomy, breathing, fascia, posture,
+            massage, and human movement &mdash; and working directly with thousands of
+            students and clients &mdash; she developed a method for restoring alignment
+            through movement rather than forcing the body into static positions.
+          </p>
+        </Reveal>
         {credentialsBlock}
       </Section>
     )
