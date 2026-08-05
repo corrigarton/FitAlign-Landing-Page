@@ -3115,25 +3115,25 @@ function AboutSection() {
   )
 
   const storyHeadlineStyle: React.CSSProperties = {
-    color: isMobile ? "#ffffff" : "#d7b463",
+    color: isMobile ? "#ffffff" : "rgba(240,236,227,0.76)",
     fontFamily: "'Inter', system-ui, sans-serif",
     fontSize: isMobile
       ? "clamp(1.16rem, 1.65vw, 1.32rem)"
-      : "13px",
-    fontWeight: isMobile ? 650 : 500,
-    letterSpacing: isMobile ? "-0.015em" : "0.14em",
+      : "clamp(1.2rem, 1.55vw, 1.4rem)",
+    fontWeight: isMobile ? 650 : 600,
+    letterSpacing: isMobile ? "-0.015em" : "-0.01em",
     lineHeight: isMobile ? 1.25 : 1.35,
-    textTransform: isMobile ? "none" : "uppercase",
-    marginBottom: isMobile ? "18px" : "22px",
+    textTransform: "none",
+    marginBottom: "18px",
     display: "flex",
     alignItems: "center",
-    gap: "12px",
-    justifyContent: isMobile ? "flex-start" : "center",
-    width: "100%",
-    padding: isMobile ? 0 : "15px 20px",
-    border: isMobile ? "none" : "1px solid rgba(201,169,110,0.2)",
-    borderRadius: isMobile ? 0 : "10px",
-    background: isMobile ? "transparent" : "rgba(201,169,110,0.035)",
+    gap: isMobile ? "12px" : 0,
+    justifyContent: "flex-start",
+    width: isMobile ? "100%" : "fit-content",
+    padding: 0,
+    border: "none",
+    borderRadius: 0,
+    background: "transparent",
   }
 
   const storyHeadlineAccentStyle: React.CSSProperties = {
@@ -3144,26 +3144,18 @@ function AboutSection() {
     background: "linear-gradient(90deg, #c9a96e, rgba(201,169,110,0.28))",
   }
 
-  const storyNumberStyle: React.CSSProperties = {
-    color: "rgba(215,180,99,0.72)",
-    fontSize: "11px",
-    fontWeight: 700,
-    letterSpacing: "0.14em",
-    lineHeight: 1,
-    flexShrink: 0,
-    transform: "translateY(1px)",
-  }
-
   const storyBodyStyle: React.CSSProperties = {
     color: isMobile
       ? "rgba(240,236,227,0.77)"
-      : "rgba(240,236,227,0.78)",
-    fontFamily: "'Inter', system-ui, sans-serif",
-    fontSize: "clamp(1rem, 1.35vw, 1.08rem)",
+      : "rgba(240,236,227,0.5)",
+    fontFamily: isMobile
+      ? "'Inter', system-ui, sans-serif"
+      : "'DM Sans', system-ui, sans-serif",
+    fontSize: isMobile ? "clamp(1rem, 1.35vw, 1.08rem)" : "17px",
     fontWeight: 400,
     fontVariationSettings: "'wght' 400",
-    lineHeight: 1.4,
-    letterSpacing: "0.005em",
+    lineHeight: isMobile ? 1.4 : 1.7,
+    letterSpacing: isMobile ? "0.005em" : 0,
     width: "100%",
   }
 
@@ -3173,12 +3165,12 @@ function AboutSection() {
         {isMobile && (
           <span aria-hidden="true" style={storyHeadlineAccentStyle} />
         )}
-        {!isMobile && <span aria-hidden="true" style={storyNumberStyle}>01</span>}
-        {!isMobile && <span aria-hidden="true" style={{ opacity: 0.45 }}>→</span>}
         A dedicated yogi
       </p>
       <p style={storyBodyStyle}>
-        Michaelle Edwards began studying yoga at 18 under Swami Satchidananda.
+        <span>
+          Michaelle Edwards began studying yoga at 18 under Swami Satchidananda.
+        </span>
         <br />
         <span aria-hidden="true" style={{ display: "block", height: "12px" }} />
         After experiencing injury and instability within her own practice, she
@@ -3194,14 +3186,16 @@ function AboutSection() {
         {isMobile && (
           <span aria-hidden="true" style={storyHeadlineAccentStyle} />
         )}
-        {!isMobile && <span aria-hidden="true" style={storyNumberStyle}>02</span>}
-        {!isMobile && <span aria-hidden="true" style={{ opacity: 0.45 }}>→</span>}
         Challenging convention
       </p>
       <p style={storyBodyStyle}>
-        Michaelle became an early critic of yoga’s pursuit of flexibility,
-        arguing that stretching and extreme ranges of motion can compromise the
-        body rather than support it.
+        <span>
+          Michaelle became an early critic of yoga’s pursuit of flexibility,
+          {isMobile ? " " : <br />}
+          arguing that stretching and extreme ranges of motion can compromise
+          {isMobile ? " " : <br />}
+          the body rather than support it.
+        </span>
         <br />
         <span aria-hidden="true" style={{ display: "block", height: "12px" }} />
         Her work drew national attention and was
@@ -3216,14 +3210,17 @@ function AboutSection() {
         {isMobile && (
           <span aria-hidden="true" style={storyHeadlineAccentStyle} />
         )}
-        {!isMobile && <span aria-hidden="true" style={storyNumberStyle}>03</span>}
-        {!isMobile && <span aria-hidden="true" style={{ opacity: 0.45 }}>→</span>}
         A different method
       </p>
-      <p style={{ ...storyBodyStyle, lineHeight: 1.48 }}>
-        Over the next three decades, she developed a fundamentally different method
-        for retraining the body, helping people from elite athletes to those
-        recovering from chronic pain and severe movement limitations.
+      <p style={{ ...storyBodyStyle, lineHeight: isMobile ? 1.48 : 1.76 }}>
+        <span>
+          Over the next three decades, she developed a fundamentally different
+          method for retraining the body.
+        </span>
+        <br />
+        <span aria-hidden="true" style={{ display: "block", height: "12px" }} />
+        Her work has helped people from elite athletes to those recovering from
+        chronic pain and severe movement limitations.
       </p>
     </>
   )
