@@ -3109,41 +3109,79 @@ function AboutSection() {
     </div>
   )
 
+  const storyHeadlineStyle: React.CSSProperties = {
+    color: "rgba(201,169,110,0.82)",
+    fontSize: "11px",
+    fontWeight: 600,
+    letterSpacing: "0.17em",
+    lineHeight: 1.5,
+    textTransform: "uppercase",
+    marginBottom: "11px",
+  }
+
+  const storyBodyStyle: React.CSSProperties = {
+    color: "rgba(240,236,227,0.7)",
+    fontSize: "1rem",
+    lineHeight: 1.68,
+  }
+
   const firstStoryBlock = (
-    <p
-      style={{
-        color: "rgba(240,236,227,0.78)",
-        fontSize: "clamp(1rem, 1.45vw, 1.08rem)",
-        lineHeight: 1.82,
-      }}
-    >
-      Michaelle Edwards began studying yoga at 18 under Swami Satchidananda.
-      After experiencing injury and instability within her own practice, she
-      began questioning whether commonly taught movements reflected the body's
-      natural design.
-    </p>
+    <>
+      <p style={storyHeadlineStyle}>A dedicated yogi</p>
+      <p style={storyBodyStyle}>
+        Michaelle Edwards began studying yoga at 18 under Swami Satchidananda.
+        After experiencing injury and instability within her own practice, she
+        began questioning whether commonly taught movements reflected the body’s
+        natural design.
+      </p>
+    </>
   )
 
   const secondStoryBlock = (
-    <p style={{ color: "rgba(240,236,227,0.66)", lineHeight: 1.82 }}>
-      Through decades of studying anatomy, breathing, fascia, posture, massage,
-      and human movement &mdash; and working directly with thousands of students
-      and clients &mdash; she developed a method for restoring alignment through
-      movement rather than forcing the body into static positions.
-    </p>
+    <>
+      <p style={storyHeadlineStyle}>Challenging convention</p>
+      <p style={storyBodyStyle}>
+        Michaelle became an early critic of yoga’s pursuit of flexibility,
+        arguing that stretching and extreme ranges of motion can compromise the
+        body rather than support it. Her work drew national attention and was
+        recognized as revolutionary and paradigm-shifting.
+      </p>
+    </>
   )
+
+  const thirdStoryBlock = (
+    <>
+      <p style={storyHeadlineStyle}>A different method</p>
+      <p style={storyBodyStyle}>
+        Over the next three decades, she developed a fundamentally different method
+        for retraining the body, helping people from elite athletes to those
+        recovering from chronic pain and severe movement limitations.
+      </p>
+    </>
+  )
+
+  const storyPanelStyle: React.CSSProperties = {
+    padding: isMobile ? "22px" : "15px 18px",
+    border: "1px solid rgba(255,255,255,0.075)",
+    borderRadius: "12px",
+    background:
+      "linear-gradient(110deg, rgba(255,255,255,0.032), rgba(255,255,255,0.014))",
+    boxShadow: "inset 2px 0 0 rgba(201,169,110,0.38)",
+  }
 
   const bioBlock = (
     <Reveal delay={100}>
       <div
         style={{
-          paddingLeft: "22px",
-          borderLeft: "1px solid rgba(201,169,110,0.32)",
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
           marginBottom: "24px",
         }}
       >
-        <div style={{ marginBottom: "18px" }}>{firstStoryBlock}</div>
-        {secondStoryBlock}
+        <div style={storyPanelStyle}>{firstStoryBlock}</div>
+        <div style={storyPanelStyle}>{secondStoryBlock}</div>
+        <div style={storyPanelStyle}>{thirdStoryBlock}</div>
       </div>
     </Reveal>
   )
@@ -3353,15 +3391,7 @@ function AboutSection() {
       <Section>
         {headerBlock}
         <Reveal delay={100}>
-          <div
-            style={{
-              marginBottom: "20px",
-              padding: "22px",
-              border: "1px solid rgba(255,255,255,0.075)",
-              borderRadius: "12px",
-              background: "rgba(255,255,255,0.022)",
-            }}
-          >
+          <div style={{ ...storyPanelStyle, marginBottom: "20px" }}>
             {firstStoryBlock}
           </div>
         </Reveal>
@@ -3369,14 +3399,14 @@ function AboutSection() {
         <Reveal delay={120}>
           <div
             style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
               marginBottom: "24px",
-              padding: "22px",
-              border: "1px solid rgba(255,255,255,0.075)",
-              borderRadius: "12px",
-              background: "rgba(255,255,255,0.022)",
             }}
           >
-            {secondStoryBlock}
+            <div style={storyPanelStyle}>{secondStoryBlock}</div>
+            <div style={storyPanelStyle}>{thirdStoryBlock}</div>
           </div>
         </Reveal>
         {credentialsBlock}
@@ -3389,10 +3419,10 @@ function AboutSection() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "minmax(340px, 0.78fr) minmax(0, 1.22fr)",
+          gridTemplateColumns: "430px minmax(0, 640px)",
           gap: "clamp(32px, 5vw, 64px)",
           alignItems: "stretch",
-          maxWidth: "1080px",
+          maxWidth: "1134px",
           margin: "0 auto",
         }}
       >
@@ -3400,6 +3430,10 @@ function AboutSection() {
         <div
           style={{
             aspectRatio: "374 / 558",
+            width: "100%",
+            maxWidth: "430px",
+            justifySelf: "center",
+            alignSelf: "start",
             overflow: "hidden",
             borderRadius: "14px",
             border: "1px solid rgba(255,255,255,0.09)",
@@ -3423,14 +3457,14 @@ function AboutSection() {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            maxWidth: "590px",
+            maxWidth: "640px",
           }}
         >
           {headerBlock}
           {bioBlock}
         </div>
       </div>
-      <div style={{ maxWidth: "760px", margin: "48px auto 0" }}>
+      <div style={{ maxWidth: "760px", margin: "80px auto 0" }}>
         {credentialsBlock}
       </div>
     </Section>
