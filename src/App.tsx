@@ -2812,34 +2812,70 @@ function MethodSection() {
             </h2>
           </Reveal>
           <Reveal delay={120}>
-            <p
+            <div
               style={{
-                color: "rgba(240,236,227,0.68)",
-                lineHeight: 1.88,
-                marginBottom: "18px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
               }}
             >
-              The body can establish a new pattern when it experiences a way of
-              moving that provides greater stability with less effort.
-            </p>
-            <p style={{ color: "rgba(240,236,227,0.68)", lineHeight: 1.88 }}>
-              Each FitAlign lesson combines explanation with guided movement so
-              you can build a different relationship with how your body creates
-              support.
-            </p>
+              {[
+                {
+                  label: "Build a better pattern",
+                  body: "The body can establish a new pattern when it experiences a way of moving that provides greater stability with less effort.",
+                },
+                {
+                  label: "Connect knowledge to movement",
+                  body: "FitAlign pairs clear explanations with guided movement. You understand what your body is designed to do, then feel and practice it for yourself.",
+                },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  style={{
+                    padding: "clamp(20px, 3vw, 26px)",
+                    border: "1px solid rgba(255,255,255,0.075)",
+                    borderRadius: "12px",
+                    background: "rgba(255,255,255,0.022)",
+                    boxShadow: "inset 2px 0 0 rgba(201,169,110,0.45)",
+                  }}
+                >
+                  <p
+                    style={{
+                      color: "rgba(240,236,227,0.92)",
+                      fontFamily: "var(--font-display)",
+                      fontSize: "clamp(1rem, 1.5vw, 1.12rem)",
+                      fontWeight: 600,
+                      letterSpacing: "0.01em",
+                      marginBottom: "12px",
+                    }}
+                  >
+                    {item.label}
+                  </p>
+                  <p
+                    style={{
+                      color: "rgba(240,236,227,0.72)",
+                      fontSize: "clamp(0.98rem, 1.35vw, 1.05rem)",
+                      lineHeight: 1.75,
+                    }}
+                  >
+                    {item.body}
+                  </p>
+                </div>
+              ))}
+            </div>
           </Reveal>
         </div>
 
-        <div>
+        <div style={{ paddingTop: isMobile ? 0 : "134px" }}>
           {steps.map((step, i) => (
             <Reveal key={step.label} delay={140 + i * 70}>
               <div
                 style={{
                   display: "flex",
-                  alignItems: "flex-start",
-                  gap: isMobile ? "18px" : "24px",
-                  paddingBottom: "28px",
-                  marginBottom: i < steps.length - 1 ? "28px" : 0,
+                  alignItems: "center",
+                  gap: isMobile ? "16px" : "20px",
+                  padding: "18px 0",
+                  marginBottom: 0,
                   borderBottom:
                     i < steps.length - 1
                       ? "1px solid rgba(255,255,255,0.055)"
@@ -3215,17 +3251,29 @@ function AboutSection() {
                     style={{
                       padding: "6px 10px",
                       borderRadius: "999px",
-                      border: "1px solid rgba(255,255,255,0.085)",
+                      border:
+                        entry === "People of all ages"
+                          ? "1px solid rgba(201,169,110,0.36)"
+                          : "1px solid rgba(255,255,255,0.085)",
                       background:
-                        heading === "Trusted by"
+                        entry === "People of all ages"
+                          ? "rgba(201,169,110,0.14)"
+                          : heading === "Trusted by"
                           ? "rgba(201,169,110,0.065)"
                           : "rgba(255,255,255,0.025)",
                       color:
-                        heading === "Trusted by"
+                        entry === "People of all ages"
+                          ? "#d7bd82"
+                          : heading === "Trusted by"
                           ? "rgba(240,236,227,0.8)"
                           : "rgba(240,236,227,0.68)",
                       fontSize: isMobile ? "13px" : "13.5px",
-                      fontWeight: heading === "Trusted by" ? 500 : 400,
+                      fontWeight:
+                        entry === "People of all ages"
+                          ? 600
+                          : heading === "Trusted by"
+                            ? 500
+                            : 400,
                       lineHeight: 1.35,
                     }}
                   >
