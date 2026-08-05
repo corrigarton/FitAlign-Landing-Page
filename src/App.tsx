@@ -3091,7 +3091,7 @@ function AboutSection() {
   const headerBlock = (
     <div
       style={{
-        maxWidth: "1134px",
+        maxWidth: "1280px",
         margin: "0 auto clamp(28px, 4vw, 44px)",
       }}
     >
@@ -3115,25 +3115,42 @@ function AboutSection() {
   )
 
   const storyHeadlineStyle: React.CSSProperties = {
-    color: "rgba(201,169,110,0.82)",
-    fontSize: "11px",
-    fontWeight: 600,
-    letterSpacing: "0.17em",
-    lineHeight: 1.5,
-    textTransform: "uppercase",
-    marginBottom: "14px",
+    color: "rgba(240,236,227,0.92)",
+    fontFamily: "var(--font-display)",
+    fontSize: "clamp(1.16rem, 1.65vw, 1.32rem)",
+    fontWeight: 650,
+    letterSpacing: "-0.015em",
+    lineHeight: 1.25,
+    marginBottom: "18px",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+  }
+
+  const storyHeadlineAccentStyle: React.CSSProperties = {
+    width: "28px",
+    height: "2px",
+    flexShrink: 0,
+    borderRadius: "999px",
+    background: "linear-gradient(90deg, #c9a96e, rgba(201,169,110,0.28))",
   }
 
   const storyBodyStyle: React.CSSProperties = {
-    color: "rgba(255,255,255,0.78)",
-    fontSize: "17px",
-    lineHeight: 1.65,
-    maxWidth: "540px",
+    color: "#f7f5f0",
+    fontFamily: "'DM Sans', system-ui, sans-serif",
+    fontSize: "clamp(0.98rem, 1.35vw, 1.05rem)",
+    fontWeight: 300,
+    fontVariationSettings: "'wght' 300",
+    lineHeight: 1.75,
+    width: "100%",
   }
 
   const firstStoryBlock = (
     <>
-      <p style={storyHeadlineStyle}>A dedicated yogi</p>
+      <p style={storyHeadlineStyle}>
+        <span aria-hidden="true" style={storyHeadlineAccentStyle} />
+        A dedicated yogi
+      </p>
       <p style={storyBodyStyle}>
         Michaelle Edwards began studying yoga at 18 under Swami Satchidananda.{" "}
         After experiencing injury and instability within her own practice, she
@@ -3145,7 +3162,10 @@ function AboutSection() {
 
   const secondStoryBlock = (
     <>
-      <p style={storyHeadlineStyle}>Challenging convention</p>
+      <p style={storyHeadlineStyle}>
+        <span aria-hidden="true" style={storyHeadlineAccentStyle} />
+        Challenging convention
+      </p>
       <p style={storyBodyStyle}>
         Michaelle became an early critic of yoga’s pursuit of flexibility,
         arguing that stretching and extreme ranges of motion can compromise the
@@ -3158,7 +3178,10 @@ function AboutSection() {
 
   const thirdStoryBlock = (
     <>
-      <p style={storyHeadlineStyle}>A different method</p>
+      <p style={storyHeadlineStyle}>
+        <span aria-hidden="true" style={storyHeadlineAccentStyle} />
+        A different method
+      </p>
       <p style={storyBodyStyle}>
         Over the next three decades, she developed a fundamentally different method
         for retraining the body, helping people from elite athletes to those
@@ -3168,7 +3191,7 @@ function AboutSection() {
   )
 
   const storyPanelStyle: React.CSSProperties = {
-    padding: isMobile ? "22px 26px" : "15px 24px",
+    padding: isMobile ? "28px 26px" : "28px 24px",
     border: "1px solid rgba(255,255,255,0.075)",
     borderRadius: "12px",
     background:
@@ -3438,14 +3461,14 @@ function AboutSection() {
         padded={false}
         style={{
           padding: "clamp(32px, 4vw, 52px)",
-          maxWidth: "1134px",
+          maxWidth: "1280px",
           margin: "0 auto",
         }}
       >
         <div
           style={{
           display: "grid",
-          gridTemplateColumns: "430px minmax(0, 640px)",
+          gridTemplateColumns: "430px minmax(0, 1fr)",
           gap: "clamp(32px, 5vw, 64px)",
           alignItems: "stretch",
           }}
@@ -3481,7 +3504,7 @@ function AboutSection() {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            maxWidth: "640px",
+            width: "100%",
           }}
         >
           {bioBlock}
