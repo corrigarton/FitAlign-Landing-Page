@@ -3089,7 +3089,12 @@ function AboutSection() {
   ]
 
   const headerBlock = (
-    <div style={{ marginBottom: "24px" }}>
+    <div
+      style={{
+        maxWidth: "1134px",
+        margin: "0 auto clamp(28px, 4vw, 44px)",
+      }}
+    >
       <Reveal>
         <SectionTag label="The Founder" />
       </Reveal>
@@ -3116,20 +3121,21 @@ function AboutSection() {
     letterSpacing: "0.17em",
     lineHeight: 1.5,
     textTransform: "uppercase",
-    marginBottom: "11px",
+    marginBottom: "14px",
   }
 
   const storyBodyStyle: React.CSSProperties = {
-    color: "rgba(240,236,227,0.7)",
-    fontSize: "1rem",
-    lineHeight: 1.68,
+    color: "rgba(255,255,255,0.78)",
+    fontSize: "17px",
+    lineHeight: 1.65,
+    maxWidth: "540px",
   }
 
   const firstStoryBlock = (
     <>
       <p style={storyHeadlineStyle}>A dedicated yogi</p>
       <p style={storyBodyStyle}>
-        Michaelle Edwards began studying yoga at 18 under Swami Satchidananda.
+        Michaelle Edwards began studying yoga at 18 under Swami Satchidananda.{" "}
         After experiencing injury and instability within her own practice, she
         began questioning whether commonly taught movements reflected the body’s
         natural design.
@@ -3143,7 +3149,8 @@ function AboutSection() {
       <p style={storyBodyStyle}>
         Michaelle became an early critic of yoga’s pursuit of flexibility,
         arguing that stretching and extreme ranges of motion can compromise the
-        body rather than support it. Her work drew national attention and was
+        body rather than support it.{" "}
+        Her work drew national attention and was
         recognized as revolutionary and paradigm-shifting.
       </p>
     </>
@@ -3161,7 +3168,7 @@ function AboutSection() {
   )
 
   const storyPanelStyle: React.CSSProperties = {
-    padding: isMobile ? "22px" : "15px 18px",
+    padding: isMobile ? "22px 26px" : "15px 24px",
     border: "1px solid rgba(255,255,255,0.075)",
     borderRadius: "12px",
     background:
@@ -3170,20 +3177,24 @@ function AboutSection() {
   }
 
   const bioBlock = (
-    <Reveal delay={100}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "8px",
-          marginBottom: "24px",
-        }}
-      >
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "18px",
+        marginBottom: "24px",
+      }}
+    >
+      <Reveal delay={80}>
         <div style={storyPanelStyle}>{firstStoryBlock}</div>
+      </Reveal>
+      <Reveal delay={220}>
         <div style={storyPanelStyle}>{secondStoryBlock}</div>
+      </Reveal>
+      <Reveal delay={360}>
         <div style={storyPanelStyle}>{thirdStoryBlock}</div>
-      </div>
-    </Reveal>
+      </Reveal>
+    </div>
   )
 
   const credentialsBlock = (
@@ -3390,42 +3401,55 @@ function AboutSection() {
     return (
       <Section>
         {headerBlock}
-        <Reveal delay={100}>
-          <div style={{ ...storyPanelStyle, marginBottom: "20px" }}>
-            {firstStoryBlock}
-          </div>
-        </Reveal>
-        {photoBlock}
-        <Reveal delay={120}>
+        <Card
+          padded={false}
+          style={{ padding: "clamp(22px, 6vw, 32px)" }}
+        >
+          <Reveal delay={100}>
+            <div style={{ ...storyPanelStyle, marginBottom: "20px" }}>
+              {firstStoryBlock}
+            </div>
+          </Reveal>
+          {photoBlock}
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "10px",
-              marginBottom: "24px",
+              gap: "18px",
             }}
           >
-            <div style={storyPanelStyle}>{secondStoryBlock}</div>
-            <div style={storyPanelStyle}>{thirdStoryBlock}</div>
+            <Reveal delay={240}>
+              <div style={storyPanelStyle}>{secondStoryBlock}</div>
+            </Reveal>
+            <Reveal delay={380}>
+              <div style={storyPanelStyle}>{thirdStoryBlock}</div>
+            </Reveal>
           </div>
-        </Reveal>
-        {credentialsBlock}
+        </Card>
+        <div style={{ marginTop: "48px" }}>{credentialsBlock}</div>
       </Section>
     )
   }
 
   return (
     <Section>
-      <div
+      {headerBlock}
+      <Card
+        padded={false}
         style={{
-          display: "grid",
-          gridTemplateColumns: "430px minmax(0, 640px)",
-          gap: "clamp(32px, 5vw, 64px)",
-          alignItems: "stretch",
+          padding: "clamp(32px, 4vw, 52px)",
           maxWidth: "1134px",
           margin: "0 auto",
         }}
       >
+        <div
+          style={{
+          display: "grid",
+          gridTemplateColumns: "430px minmax(0, 640px)",
+          gap: "clamp(32px, 5vw, 64px)",
+          alignItems: "stretch",
+          }}
+        >
         {/* Photo */}
         <div
           style={{
@@ -3451,7 +3475,7 @@ function AboutSection() {
             }}
           />
         </div>
-        {/* Header + Bio */}
+        {/* Biography */}
         <div
           style={{
             display: "flex",
@@ -3460,10 +3484,10 @@ function AboutSection() {
             maxWidth: "640px",
           }}
         >
-          {headerBlock}
           {bioBlock}
         </div>
       </div>
+      </Card>
       <div style={{ maxWidth: "760px", margin: "80px auto 0" }}>
         {credentialsBlock}
       </div>
