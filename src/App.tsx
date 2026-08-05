@@ -3115,39 +3115,46 @@ function AboutSection() {
   )
 
   const storyHeadlineStyle: React.CSSProperties = {
-    color: isMobile ? "#ffffff" : "rgba(240,236,227,0.76)",
+    color: "#ffffff",
     fontFamily: "'Inter', system-ui, sans-serif",
-    fontSize: isMobile
-      ? "clamp(1.16rem, 1.65vw, 1.32rem)"
-      : "clamp(1.2rem, 1.55vw, 1.4rem)",
-    fontWeight: isMobile ? 650 : 600,
-    letterSpacing: isMobile ? "-0.015em" : "-0.01em",
-    lineHeight: isMobile ? 1.25 : 1.35,
+    fontSize: undefined,
+    fontWeight: undefined,
+    letterSpacing: undefined,
+    lineHeight: undefined,
     textTransform: "none",
-    marginBottom: "18px",
-    display: "flex",
-    alignItems: "center",
-    gap: isMobile ? "12px" : 0,
-    justifyContent: "flex-start",
-    width: isMobile ? "100%" : "fit-content",
+    marginBottom: 0,
+    display: "block",
+    width: "fit-content",
     padding: 0,
     border: "none",
     borderRadius: 0,
     background: "transparent",
   }
 
-  const storyHeadlineAccentStyle: React.CSSProperties = {
-    width: "28px",
-    height: "2px",
-    flexShrink: 0,
-    borderRadius: "999px",
-    background: "linear-gradient(90deg, #c9a96e, rgba(201,169,110,0.28))",
+  const storyKickerStyle: React.CSSProperties = {
+    display: "block",
+    color: "rgba(201,169,110,0.82)",
+    fontSize: "11px",
+    fontWeight: 600,
+    letterSpacing: "0.2em",
+    lineHeight: 1,
+    textTransform: "uppercase",
+    marginBottom: "12px",
+  }
+
+  const storyTitleStyle: React.CSSProperties = {
+    display: "block",
+    color: "rgba(248,246,241,0.94)",
+    fontSize: "clamp(1.45rem, 1.85vw, 1.7rem)",
+    fontWeight: 600,
+    letterSpacing: "-0.025em",
+    lineHeight: 1.18,
   }
 
   const storyBodyStyle: React.CSSProperties = {
     color: isMobile
       ? "rgba(240,236,227,0.77)"
-      : "rgba(240,236,227,0.5)",
+      : "rgba(240,236,227,0.78)",
     fontFamily: isMobile
       ? "'Inter', system-ui, sans-serif"
       : "'DM Sans', system-ui, sans-serif",
@@ -3162,20 +3169,18 @@ function AboutSection() {
   const firstStoryBlock = (
     <>
       <p style={storyHeadlineStyle}>
-        {isMobile && (
-          <span aria-hidden="true" style={storyHeadlineAccentStyle} />
-        )}
-        A dedicated yogi
+        <span style={storyKickerStyle}>01 / Origins</span>
+        <span style={storyTitleStyle}>A dedicated yogi</span>
       </p>
       <p style={storyBodyStyle}>
-        <span>
+        <span style={{ display: "block" }}>
           Michaelle Edwards began studying yoga at 18 under Swami Satchidananda.
         </span>
-        <br />
-        <span aria-hidden="true" style={{ display: "block", height: "12px" }} />
-        After experiencing injury and instability within her own practice, she
-        began questioning whether commonly taught movements reflected the body’s
-        natural design.
+        <span style={{ display: "block", marginTop: "12px" }}>
+          After experiencing injury and instability within her own practice, she
+          began questioning whether commonly taught movements reflected the body’s
+          natural design.
+        </span>
       </p>
     </>
   )
@@ -3183,23 +3188,18 @@ function AboutSection() {
   const secondStoryBlock = (
     <>
       <p style={storyHeadlineStyle}>
-        {isMobile && (
-          <span aria-hidden="true" style={storyHeadlineAccentStyle} />
-        )}
-        Challenging convention
+        <span style={storyKickerStyle}>02 / Critique</span>
+        <span style={storyTitleStyle}>From practitioner to critic</span>
       </p>
       <p style={storyBodyStyle}>
-        <span>
-          Michaelle became an early critic of yoga’s pursuit of flexibility,
-          {isMobile ? " " : <br />}
-          arguing that stretching and extreme ranges of motion can compromise
-          {isMobile ? " " : <br />}
-          the body rather than support it.
+        <span style={{ display: "block" }}>
+          As her understanding deepened, Michaelle began questioning the
+          flexibility-focused practices she had once embraced.
         </span>
-        <br />
-        <span aria-hidden="true" style={{ display: "block", height: "12px" }} />
-        Her work drew national attention and was
-        recognized as revolutionary and paradigm-shifting.
+        <span style={{ display: "block", marginTop: "12px" }}>
+          Her work drew national attention and was recognized as revolutionary
+          and paradigm-shifting.
+        </span>
       </p>
     </>
   )
@@ -3207,20 +3207,18 @@ function AboutSection() {
   const thirdStoryBlock = (
     <>
       <p style={storyHeadlineStyle}>
-        {isMobile && (
-          <span aria-hidden="true" style={storyHeadlineAccentStyle} />
-        )}
-        A different method
+        <span style={storyKickerStyle}>03 / Method</span>
+        <span style={storyTitleStyle}>Building a new approach</span>
       </p>
       <p style={{ ...storyBodyStyle, lineHeight: isMobile ? 1.48 : 1.76 }}>
-        <span>
+        <span style={{ display: "block" }}>
           Over the next three decades, she developed a fundamentally different
           method for retraining the body.
         </span>
-        <br />
-        <span aria-hidden="true" style={{ display: "block", height: "12px" }} />
-        Her work has helped people from elite athletes to those recovering from
-        chronic pain and severe movement limitations.
+        <span style={{ display: "block", marginTop: "12px" }}>
+          Her work has helped people from elite athletes to those recovering from
+          chronic pain and severe movement limitations.
+        </span>
       </p>
     </>
   )
@@ -3228,13 +3226,17 @@ function AboutSection() {
   const storyPanelStyle: React.CSSProperties = {
     padding: isMobile ? "28px 26px" : 0,
     border: isMobile ? "1px solid rgba(255,255,255,0.075)" : "none",
+    borderLeft: isMobile ? "1px solid rgba(255,255,255,0.075)" : 0,
     borderRadius: isMobile ? "12px" : 0,
     background: isMobile
       ? "linear-gradient(115deg, rgba(255,255,255,0.042), rgba(255,255,255,0.018))"
       : "transparent",
     boxShadow: isMobile
-      ? "inset 2px 0 0 rgba(201,169,110,0.38), inset 0 1px 0 rgba(255,255,255,0.025)"
+      ? "inset 0 1px 0 rgba(255,255,255,0.025)"
       : "none",
+    display: "flex",
+    flexDirection: "column",
+    gap: isMobile ? "16px" : "18px",
   }
 
   const bioBlock = (
@@ -3242,7 +3244,7 @@ function AboutSection() {
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: isMobile ? "18px" : "42px",
+        gap: isMobile ? "18px" : "48px",
         marginBottom: "24px",
       }}
     >
@@ -3445,7 +3447,7 @@ function AboutSection() {
         src={michaelleImg}
         alt="Michaelle Edwards demonstrating a balance pose outdoors"
         style={{
-          width: isMobile ? "72%" : "100%",
+          width: "100%",
           maxHeight: isMobile ? "none" : "420px",
           height: "auto",
           objectFit: "contain",
@@ -3463,10 +3465,7 @@ function AboutSection() {
     return (
       <Section>
         {headerBlock}
-        <Card
-          padded={false}
-          style={{ padding: "clamp(22px, 6vw, 32px)" }}
-        >
+        <div>
           <Reveal delay={100}>
             <div style={{ ...storyPanelStyle, marginBottom: "20px" }}>
               {firstStoryBlock}
@@ -3487,7 +3486,7 @@ function AboutSection() {
               <div style={storyPanelStyle}>{thirdStoryBlock}</div>
             </Reveal>
           </div>
-        </Card>
+        </div>
         <div style={{ marginTop: "48px" }}>{credentialsBlock}</div>
       </Section>
     )
@@ -3496,40 +3495,58 @@ function AboutSection() {
   return (
     <Section>
       {headerBlock}
-      <Card
-        padded={false}
+      <div style={{ display: "flex", flexDirection: "column" }}>
+      <div
         style={{
-          padding: 0,
+          order: 2,
+          display: "grid",
+          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+          gap: "clamp(20px, 2.5vw, 32px)",
+          width: "calc(100% + 400px)",
+          maxWidth: "1680px",
+          margin: "clamp(64px, 8vw, 96px) 0 0 -200px",
+        }}
+      >
+        {[
+          { block: firstStoryBlock, delay: 80 },
+          { block: secondStoryBlock, delay: 160 },
+          { block: thirdStoryBlock, delay: 240 },
+        ].map(({ block, delay }, index) => (
+          <Card
+            key={index}
+            padded={false}
+            style={{
+              padding: "clamp(28px, 3vw, 40px)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              minHeight: "100%",
+            }}
+          >
+            <Reveal delay={delay}>
+              <div style={storyPanelStyle}>{block}</div>
+            </Reveal>
+          </Card>
+        ))}
+      </div>
+
+      <div
+        style={{
+          order: 1,
+          display: "grid",
+          gridTemplateColumns: "390px minmax(0, 760px)",
+          gap: "clamp(64px, 8vw, 120px)",
+          alignItems: "center",
+          justifyContent: "center",
           maxWidth: "1280px",
           margin: "0 auto",
-          background: "transparent",
-          backdropFilter: "none",
-          WebkitBackdropFilter: "none",
-          border: "none",
-          borderRadius: 0,
-          boxShadow: "none",
-          overflow: "visible",
         }}
       >
         <div
           style={{
-          display: "grid",
-          gridTemplateColumns: "430px minmax(0, 650px)",
-          gap: "clamp(64px, 7vw, 100px)",
-          alignItems: "stretch",
-          justifyContent: "center",
-          maxWidth: "1180px",
-          margin: "0 auto",
-          }}
-        >
-        {/* Photo */}
-        <div
-          style={{
             aspectRatio: "374 / 558",
             width: "100%",
-            maxWidth: "430px",
-            justifySelf: "center",
-            alignSelf: "start",
+            maxWidth: "390px",
             overflow: "hidden",
             borderRadius: "14px",
             border: "1px solid rgba(255,255,255,0.09)",
@@ -3548,22 +3565,8 @@ function AboutSection() {
             }}
           />
         </div>
-        {/* Biography */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            width: "100%",
-            maxWidth: "650px",
-          }}
-        >
-          {bioBlock}
-        </div>
+        <div>{credentialsBlock}</div>
       </div>
-      </Card>
-      <div style={{ maxWidth: "760px", margin: "80px auto 0" }}>
-        {credentialsBlock}
       </div>
     </Section>
   )
@@ -4229,7 +4232,8 @@ export default function App() {
         </div>
       </Section>
       <ClientASection />
-      <StretchingSection />
+      {/* Temporarily hidden; keep StretchingSection available for future use. */}
+      {/* <StretchingSection /> */}
       <MethodSection />
       <TestimonialSection />
       <AboutSection />
