@@ -207,7 +207,7 @@ function BeforeAfterPanel({
   after,
   beforeAlt,
   afterAlt,
-  showLabels = true,
+  showLabels = false,
   showDivider = true,
   mobileHeight,
   mobileBeforeObjectPosition,
@@ -920,7 +920,7 @@ function Hero() {
               letterSpacing: "-0.01em",
             }}
           >
-            Calibrate your system.
+            Access your full capacity.
           </p>
 
           {/* On mobile: transformation goes here between tagline and description */}
@@ -1137,8 +1137,114 @@ function Hero() {
 
 // ─── CLIENT B — "When Support Changes" ────────────────────────────────────────
 
+type TransformationNarrativeProps = {
+  items: { label: string; body: string }[]
+  takeaway: string
+  caption: string
+}
+
+function TransformationNarrative({ items, takeaway, caption }: TransformationNarrativeProps) {
+  const isMobile = useWindowWidth() < 768
+
+  return (
+    <div>
+      <div
+        style={{
+          border: "1px solid rgba(255,255,255,0.08)",
+          borderRadius: "14px",
+          overflow: "hidden",
+          background: "rgba(255,255,255,0.022)",
+          boxShadow: "0 18px 50px rgba(0,0,0,0.16)",
+        }}
+      >
+        {items.map((item) => (
+          <div
+            key={item.label}
+            style={{
+              padding: "clamp(18px, 2.5vw, 24px)",
+              borderBottom: "1px solid rgba(255,255,255,0.065)",
+              display: "grid",
+              gridTemplateColumns: isMobile ? "1fr" : "minmax(92px, 0.34fr) 1fr",
+              gap: isMobile ? "8px" : "clamp(16px, 2.5vw, 28px)",
+              alignItems: "start",
+            }}
+          >
+            <p
+              style={{
+                color: "#c9a96e",
+                fontSize: "11px",
+                fontWeight: 600,
+                letterSpacing: "0.2em",
+                lineHeight: 1.5,
+                textTransform: "uppercase",
+              }}
+            >
+              {item.label}
+            </p>
+            <p
+              style={{
+                color: "rgba(240,236,227,0.72)",
+                fontSize: "clamp(0.95rem, 1.3vw, 1rem)",
+                lineHeight: 1.72,
+              }}
+            >
+              {item.body}
+            </p>
+          </div>
+        ))}
+        <div
+          style={{
+            padding: "clamp(20px, 3vw, 28px)",
+            background:
+              "linear-gradient(110deg, rgba(201,169,110,0.1), rgba(201,169,110,0.025))",
+            borderLeft: "2px solid rgba(201,169,110,0.72)",
+          }}
+        >
+          <p
+            style={{
+              fontFamily: "var(--font-display)",
+              color: "rgba(240,236,227,0.92)",
+              fontSize: "clamp(1.05rem, 1.7vw, 1.25rem)",
+              lineHeight: 1.5,
+            }}
+          >
+            {takeaway}
+          </p>
+        </div>
+      </div>
+      <p
+        style={{
+          marginTop: "18px",
+          fontSize: "14px",
+          fontStyle: "italic",
+          color: "rgba(240,236,227,0.38)",
+          lineHeight: 1.6,
+        }}
+      >
+        {caption}
+      </p>
+    </div>
+  )
+}
+
 function ClientBSection() {
   const isMobile = useWindowWidth() < 768
+  const narrative = (
+    <TransformationNarrative
+      items={[
+        {
+          label: "The shift",
+          body: "His head, rib cage, pelvis, and legs moved into a more balanced relationship around the vertical line.",
+        },
+        {
+          label: "What changed",
+          body: "The whole body began organizing itself differently, rather than holding a corrected pose.",
+        },
+      ]}
+      takeaway="Better posture wasn't something he forced. It emerged from better support."
+      caption="Before and after working with Michaelle Edwards."
+    />
+  )
 
   if (isMobile) {
     return (
@@ -1154,64 +1260,21 @@ function ClientBSection() {
               fontWeight: 600,
               lineHeight: 1.1,
               color: "#f0ece3",
-              marginBottom: "24px",
+              marginBottom: "10px",
             }}
           >
             When Support Changes, the Whole Body Changes
           </h2>
         </Reveal>
-        <Reveal delay={120}>
-          <p
-            style={{
-              color: "rgba(240,236,227,0.68)",
-              lineHeight: 1.85,
-              fontSize: "1.0125rem",
-              marginBottom: "32px",
-            }}
-          >
-            This is not simply a person being told to stand straighter.
-          </p>
-        </Reveal>
         <BeforeAfterPanel
           before={clientBBefore}
           after={clientBAfter}
+          mobileHeight="clamp(420px, 56vh, 510px)"
           beforeAlt="Side profile showing forward head posture and compensatory pattern"
           afterAlt="Side profile after sessions — body organized around a balanced vertical line"
         />
         <Reveal delay={80}>
-          <div style={{ marginTop: "28px" }}>
-            <p
-              style={{
-                color: "rgba(240,236,227,0.68)",
-                lineHeight: 1.85,
-                fontSize: "1.0125rem",
-                marginBottom: "16px",
-              }}
-            >
-              His head, rib cage, abdomen, pelvis, and legs have shifted into a
-              more balanced relationship.
-            </p>
-            <p
-              style={{
-                color: "rgba(240,236,227,0.68)",
-                lineHeight: 1.85,
-                fontSize: "1.0125rem",
-                marginBottom: "20px",
-              }}
-            >
-              The entire body is organizing itself differently around the
-              vertical line.
-            </p>
-            <p
-              style={{
-                fontSize: "15px",
-                fontStyle: "italic",
-                color: "rgba(240,236,227,0.4)",
-              }}
-            >
-              Before and after working with Michaelle Edwards.
-            </p>
-          </div>
+          <div style={{ marginTop: "18px" }}>{narrative}</div>
         </Reveal>
       </Section>
     )
@@ -1247,48 +1310,7 @@ function ClientBSection() {
             </h2>
           </Reveal>
           <Reveal delay={140}>
-            <p
-              style={{
-                color: "rgba(240,236,227,0.68)",
-                lineHeight: 1.85,
-                marginBottom: "16px",
-                fontSize: "1.0125rem",
-              }}
-            >
-              This is not simply a person being told to stand straighter.
-            </p>
-            <p
-              style={{
-                color: "rgba(240,236,227,0.68)",
-                lineHeight: 1.85,
-                marginBottom: "16px",
-                fontSize: "1.0125rem",
-              }}
-            >
-              His head, rib cage, abdomen, pelvis, and legs have shifted into a
-              more balanced relationship. The entire body is organizing itself
-              differently around the vertical line.
-            </p>
-            <p
-              style={{
-                color: "rgba(240,236,227,0.68)",
-                lineHeight: 1.85,
-                marginBottom: "28px",
-                fontSize: "1.0125rem",
-              }}
-            >
-              Better posture is not something he is forcing. It is the result of
-              better support.
-            </p>
-            <p
-              style={{
-                fontSize: "15px",
-                fontStyle: "italic",
-                color: "rgba(240,236,227,0.4)",
-              }}
-            >
-              Before and after working with Michaelle Edwards.
-            </p>
+            {narrative}
           </Reveal>
         </div>
 
@@ -1765,7 +1787,7 @@ function FoundationsSection() {
     },
     {
       category: "The Missing Piece",
-      headline: "Most treatments address the effect, not the cause.",
+      headline: "Most treatments address symptoms, not the cause.",
       body: [
         "Without changing the underlying movement pattern, the body recreates the same conditions.",
       ],
@@ -1777,7 +1799,6 @@ function FoundationsSection() {
     "Poor posture",
     "Restricted movement",
     "Fatigue and stiffness",
-    "Uneven joint loading",
     "Persistent pain",
   ]
   const stabilityCascade = [
@@ -1832,7 +1853,7 @@ function FoundationsSection() {
               : "clamp(18px, 2.5vw, 26px) clamp(28px, 5vw, 48px)",
             borderBottom: "1px solid rgba(255,255,255,0.07)",
             display: isMobile ? "grid" : "flex",
-            gridTemplateColumns: isMobile ? "repeat(3, minmax(0, 1fr))" : undefined,
+            gridTemplateColumns: isMobile ? "9fr 12fr 14fr" : undefined,
             alignItems: "center",
             gap: isMobile ? "0" : "8px",
             flexWrap: isMobile ? undefined : "wrap",
@@ -2023,7 +2044,7 @@ function FoundationsSection() {
                     letterSpacing: "0.28em",
                     textTransform: "uppercase",
                     color: "rgba(240,236,227,0.35)",
-                    marginBottom: "24px",
+                    marginBottom: "12px",
                   }}
                 >
                   The compensation cascade
@@ -2035,7 +2056,7 @@ function FoundationsSection() {
                         display: "flex",
                         alignItems: "center",
                         gap: "16px",
-                        padding: "12px 0",
+                        padding: "8px 0",
                       }}
                     >
                       <div
@@ -2061,7 +2082,7 @@ function FoundationsSection() {
                       <div
                         style={{
                           width: "1px",
-                          height: "10px",
+                          height: "6px",
                           background: "rgba(201,169,110,0.18)",
                           marginLeft: "3.5px",
                         }}
@@ -2644,6 +2665,22 @@ function WhyFailsSection() {
 
 function ClientASection() {
   const isMobile = useWindowWidth() < 768
+  const narrative = (
+    <TransformationNarrative
+      items={[
+        {
+          label: "Starting point",
+          body: "Kelly already had strength, body awareness, and muscular control, but her body was organizing them through compensation.",
+        },
+        {
+          label: "After training",
+          body: "Her head, rib cage, abdomen, pelvis, and overall silhouette visibly reorganized.",
+        },
+      ]}
+      takeaway="She didn't need more strength. She needed to use the strength she already had differently."
+      caption="Before and after 10 days of teacher training with Michaelle Edwards."
+    />
+  )
 
   if (isMobile) {
     return (
@@ -2659,67 +2696,21 @@ function ClientASection() {
               fontWeight: 600,
               lineHeight: 1.1,
               color: "#f0ece3",
-              marginBottom: "24px",
+              marginBottom: "10px",
             }}
           >
             She Was Already a Pilates Instructor
           </h2>
         </Reveal>
-        <Reveal delay={120}>
-          <p
-            style={{
-              color: "rgba(240,236,227,0.68)",
-              lineHeight: 1.85,
-              fontSize: "1.0125rem",
-              marginBottom: "32px",
-            }}
-          >
-            Kelly had already developed substantial strength, body awareness,
-            and muscular control. But her body was still organizing that
-            strength through a compensatory pattern.
-          </p>
-        </Reveal>
         <BeforeAfterPanel
           before={clientABefore}
           after={clientAAfter}
+          mobileHeight="clamp(420px, 56vh, 510px)"
           beforeAlt="Kelly before sessions — strength organized through a compensatory pattern"
           afterAlt="Kelly after 3 sessions — head, rib cage, pelvis and silhouette visibly reorganized"
         />
         <Reveal delay={80}>
-          <div style={{ marginTop: "28px" }}>
-            <p
-              style={{
-                color: "rgba(240,236,227,0.68)",
-                lineHeight: 1.85,
-                fontSize: "1.0125rem",
-                marginBottom: "16px",
-              }}
-            >
-              She didn't need to build a stronger body. She needed her body to
-              use the strength it already had differently.
-            </p>
-            <p
-              style={{
-                color: "rgba(240,236,227,0.68)",
-                lineHeight: 1.85,
-                fontSize: "1.0125rem",
-                marginBottom: "20px",
-              }}
-            >
-              After completing FitAlign Teacher Training, her head, rib cage,
-              abdomen, pelvis, and overall silhouette had visibly reorganized.
-            </p>
-            <p
-              style={{
-                fontSize: "15px",
-                fontStyle: "italic",
-                color: "rgba(240,236,227,0.4)",
-              }}
-            >
-              Before and after 10 days of teacher training with Michaelle
-              Edwards.
-            </p>
-          </div>
+          <div style={{ marginTop: "18px" }}>{narrative}</div>
         </Reveal>
       </Section>
     )
@@ -2765,50 +2756,7 @@ function ClientASection() {
             </h2>
           </Reveal>
           <Reveal delay={140}>
-            <p
-              style={{
-                color: "rgba(240,236,227,0.68)",
-                lineHeight: 1.88,
-                marginBottom: "16px",
-                fontSize: "1.0125rem",
-              }}
-            >
-              Kelly had already developed substantial strength, body awareness,
-              and muscular control. But her body was still organizing that
-              strength through a compensatory pattern.
-            </p>
-            <p
-              style={{
-                color: "rgba(240,236,227,0.68)",
-                lineHeight: 1.88,
-                marginBottom: "16px",
-                fontSize: "1.0125rem",
-              }}
-            >
-              After completing FitAlign Teacher Training, her head, rib cage,
-              abdomen, pelvis, and overall silhouette had visibly reorganized.
-            </p>
-            <p
-              style={{
-                color: "rgba(240,236,227,0.68)",
-                lineHeight: 1.88,
-                marginBottom: "28px",
-                fontSize: "1.0125rem",
-              }}
-            >
-              She didn't need to build a stronger body. She needed her body to
-              use the strength it already had differently.
-            </p>
-            <p
-              style={{
-                fontSize: "15px",
-                fontStyle: "italic",
-                color: "rgba(240,236,227,0.4)",
-              }}
-            >
-              Before and after 10 days of teacher training with Michaelle
-              Edwards.
-            </p>
+            {narrative}
           </Reveal>
         </div>
       </div>
@@ -2900,21 +2848,28 @@ function MethodSection() {
               >
                 <div
                   style={{
-                    fontSize: isMobile ? "1.75rem" : "clamp(2rem, 3.5vw, 2.8rem)",
-                    fontFamily: "var(--font-display)",
-                    color: isMobile
-                      ? "rgba(201,169,110,0.78)"
-                      : "rgba(201,169,110,0.22)",
-                    fontWeight: 300,
+                    width: isMobile ? "36px" : "40px",
+                    height: isMobile ? "36px" : "40px",
+                    borderRadius: "10px",
+                    border: "1px solid rgba(201,169,110,0.25)",
+                    background:
+                      "linear-gradient(145deg, rgba(201,169,110,0.1), rgba(201,169,110,0.025))",
+                    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.035)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "11px",
+                    fontFamily: "'DM Sans', system-ui, sans-serif",
+                    letterSpacing: "0.12em",
+                    color: "rgba(201,169,110,0.82)",
+                    fontWeight: 600,
                     lineHeight: 1,
                     flexShrink: 0,
-                    width: "2ch",
-                    textAlign: "right",
                   }}
                 >
-                  {step.n}
+                  {String(step.n).padStart(2, "0")}
                 </div>
-                <div style={{ paddingTop: isMobile ? 0 : "6px" }}>
+                <div>
                   <p
                     style={{
                       color: "#f0ece3",
@@ -3080,12 +3035,21 @@ function TestimonialSection() {
 function AboutSection() {
   const w = useWindowWidth()
   const isMobile = w < 768
-
-  const credentials = [
-    "More than 500 teachers trained worldwide",
-    "Two published books",
-    "Featured in The New York Times, Huffington Post, Spinal Research Journal, and other health and movement publications",
-    "Used by athletes, dancers, teachers, movement professionals, and students of all ages",
+  const featuredBy = [
+    "The New York Times",
+    "Huffington Post",
+    "Spinal Research Journal",
+    "More +",
+  ]
+  const trustedBy = [
+    "Professional athletes",
+    "Dancers",
+    "Physicians",
+    "Personal trainers",
+    "Pilates teachers",
+    "Yoga instructors",
+    "Surfers",
+    "People of all ages",
   ]
 
   const headerBlock = (
@@ -3103,35 +3067,49 @@ function AboutSection() {
             color: "#f0ece3",
           }}
         >
-          Developed Through More Than 30 Years of Investigation
+          A Pioneer in Human Movement
         </h2>
       </Reveal>
     </div>
   )
 
+  const firstStoryBlock = (
+    <p
+      style={{
+        color: "rgba(240,236,227,0.78)",
+        fontSize: "clamp(1rem, 1.45vw, 1.08rem)",
+        lineHeight: 1.82,
+      }}
+    >
+      Michaelle Edwards began studying yoga at 18 under Swami Satchidananda.
+      After experiencing injury and instability within her own practice, she
+      began questioning whether commonly taught movements reflected the body's
+      natural design.
+    </p>
+  )
+
+  const secondStoryBlock = (
+    <p style={{ color: "rgba(240,236,227,0.66)", lineHeight: 1.82 }}>
+      Through decades of studying anatomy, breathing, fascia, posture, massage,
+      and human movement &mdash; and working directly with thousands of students
+      and clients &mdash; she developed a method for restoring alignment through
+      movement rather than forcing the body into static positions.
+    </p>
+  )
+
   const bioBlock = (
-    <div style={{ marginBottom: "24px" }}>
-      <Reveal delay={100}>
-        <p
-          style={{
-            color: "rgba(240,236,227,0.68)",
-            lineHeight: 1.88,
-            marginBottom: "18px",
-          }}
-        >
-          Michaelle Edwards began studying yoga at 18 under Swami Satchidananda.
-          After experiencing injury and instability within her own practice, she
-          began questioning whether commonly taught movements reflected the
-          body's natural design.
-        </p>
-        <p style={{ color: "rgba(240,236,227,0.68)", lineHeight: 1.88 }}>
-          Through decades of studying anatomy, breathing, fascia, posture,
-          massage, and human movement &mdash; and working directly with thousands of
-          students and clients &mdash; she developed a method for restoring alignment
-          through movement rather than forcing the body into static positions.
-        </p>
-      </Reveal>
-    </div>
+    <Reveal delay={100}>
+      <div
+        style={{
+          paddingLeft: "22px",
+          borderLeft: "1px solid rgba(201,169,110,0.32)",
+          marginBottom: "24px",
+        }}
+      >
+        <div style={{ marginBottom: "18px" }}>{firstStoryBlock}</div>
+        {secondStoryBlock}
+      </div>
+    </Reveal>
   )
 
   const credentialsBlock = (
@@ -3144,50 +3122,148 @@ function AboutSection() {
             textTransform: "uppercase",
             color: "#c9a96e",
             marginBottom: "20px",
+            textAlign: isMobile ? "left" : "center",
           }}
         >
-          Credentials
+          A Body of Work
         </p>
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          {credentials.map((c, i) => (
-            <div
-              key={i}
-              style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}
-            >
+        <div
+          style={{
+            border: "1px solid rgba(255,255,255,0.075)",
+            borderRadius: "12px",
+            overflow: "hidden",
+            background: "rgba(255,255,255,0.018)",
+          }}
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+              background:
+                "linear-gradient(110deg, rgba(201,169,110,0.08), rgba(201,169,110,0.015))",
+            }}
+          >
+            {[
+              ["500+", "Teachers trained worldwide"],
+              ["02", "Published books"],
+            ].map(([value, label], i) => (
               <div
+                key={label}
                 style={{
-                  width: "4px",
-                  height: "4px",
-                  borderRadius: "50%",
-                  background: "#c9a96e",
-                  flexShrink: 0,
-                  marginTop: "9px",
-                }}
-              />
-              <p
-                style={{
-                  color: "rgba(240,236,227,0.68)",
-                  lineHeight: 1.72,
-                  fontSize: "16px",
+                  padding: isMobile ? "20px 16px" : "22px",
+                  borderLeft:
+                    i === 1 ? "1px solid rgba(255,255,255,0.075)" : "none",
                 }}
               >
-                {c}
+                <p
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    color: "#c9a96e",
+                    fontSize: "clamp(1.65rem, 2.6vw, 2rem)",
+                    fontWeight: 600,
+                    lineHeight: 1,
+                    marginBottom: "10px",
+                  }}
+                >
+                  {value}
+                </p>
+                <p
+                  style={{
+                    color: "rgba(240,236,227,0.76)",
+                    fontSize: isMobile ? "14px" : "15px",
+                    fontWeight: 500,
+                    lineHeight: 1.45,
+                  }}
+                >
+                  {label}
+                </p>
+              </div>
+            ))}
+          </div>
+          {[
+            ["Featured by", featuredBy],
+            ["Trusted by", trustedBy],
+          ].map(([heading, entries]) => (
+            <div
+              key={heading as string}
+              style={{
+                padding: isMobile ? "18px 16px" : "18px 22px",
+                borderTop: "1px solid rgba(255,255,255,0.07)",
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : "110px 1fr",
+                gap: isMobile ? "9px" : "20px",
+              }}
+            >
+              <p
+                style={{
+                  color: "rgba(240,236,227,0.88)",
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  lineHeight: 1.5,
+                }}
+              >
+                {heading as string}
               </p>
+              <div
+                style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}
+              >
+                {(entries as string[]).map((entry) => (
+                  <span
+                    key={entry}
+                    style={{
+                      padding: "6px 10px",
+                      borderRadius: "999px",
+                      border: "1px solid rgba(255,255,255,0.085)",
+                      background:
+                        heading === "Trusted by"
+                          ? "rgba(201,169,110,0.065)"
+                          : "rgba(255,255,255,0.025)",
+                      color:
+                        heading === "Trusted by"
+                          ? "rgba(240,236,227,0.8)"
+                          : "rgba(240,236,227,0.68)",
+                      fontSize: isMobile ? "13px" : "13.5px",
+                      fontWeight: heading === "Trusted by" ? 500 : 400,
+                      lineHeight: 1.35,
+                    }}
+                  >
+                    {entry === "More +" ? (
+                      <a
+                        href={`${appBaseUrl}press`}
+                        aria-label="View more press features"
+                        style={{
+                          color: "#c9a96e",
+                          textDecoration: "none",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {entry}
+                      </a>
+                    ) : (
+                      entry
+                    )}
+                  </span>
+                ))}
+              </div>
             </div>
           ))}
         </div>
         <div
           style={{
-            marginTop: "24px",
-            paddingTop: "24px",
-            borderTop: "1px solid rgba(255,255,255,0.07)",
+            marginTop: "12px",
+            padding: "18px 20px",
+            border: "1px solid rgba(201,169,110,0.16)",
+            borderRadius: "10px",
+            background: "rgba(201,169,110,0.045)",
           }}
         >
           <p
             style={{
-              color: "rgba(240,236,227,0.48)",
-              fontSize: "15px",
-              lineHeight: 1.72,
+              color: "rgba(240,236,227,0.68)",
+              fontSize: "14px",
+              lineHeight: 1.65,
             }}
           >
             FitAlign brings this body of work into a structured digital course
@@ -3216,7 +3292,9 @@ function AboutSection() {
           height: "auto",
           objectFit: "contain",
           display: "block",
-          borderRadius: "4px",
+          borderRadius: "12px",
+          border: "1px solid rgba(255,255,255,0.09)",
+          boxShadow: "0 24px 60px rgba(0,0,0,0.28)",
         }}
       />
     </div>
@@ -3227,33 +3305,31 @@ function AboutSection() {
       <Section>
         {headerBlock}
         <Reveal delay={100}>
-          <p
+          <div
             style={{
-              color: "rgba(240,236,227,0.68)",
-              lineHeight: 1.88,
-              marginBottom: "24px",
+              marginBottom: "20px",
+              padding: "22px",
+              border: "1px solid rgba(255,255,255,0.075)",
+              borderRadius: "12px",
+              background: "rgba(255,255,255,0.022)",
             }}
           >
-            Michaelle Edwards began studying yoga at 18 under Swami Satchidananda.
-            After experiencing injury and instability within her own practice, she
-            began questioning whether commonly taught movements reflected the
-            body's natural design.
-          </p>
+            {firstStoryBlock}
+          </div>
         </Reveal>
         {photoBlock}
         <Reveal delay={120}>
-          <p
+          <div
             style={{
-              color: "rgba(240,236,227,0.68)",
-              lineHeight: 1.88,
               marginBottom: "24px",
+              padding: "22px",
+              border: "1px solid rgba(255,255,255,0.075)",
+              borderRadius: "12px",
+              background: "rgba(255,255,255,0.022)",
             }}
           >
-            Through decades of studying anatomy, breathing, fascia, posture,
-            massage, and human movement &mdash; and working directly with thousands of
-            students and clients &mdash; she developed a method for restoring alignment
-            through movement rather than forcing the body into static positions.
-          </p>
+            {secondStoryBlock}
+          </div>
         </Reveal>
         {credentialsBlock}
       </Section>
@@ -3265,17 +3341,21 @@ function AboutSection() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1.6fr",
+          gridTemplateColumns: "minmax(340px, 0.78fr) minmax(0, 1.22fr)",
           gap: "clamp(32px, 5vw, 64px)",
-          alignItems: "start",
+          alignItems: "stretch",
+          maxWidth: "1080px",
+          margin: "0 auto",
         }}
       >
         {/* Photo */}
         <div
           style={{
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
+            aspectRatio: "374 / 558",
+            overflow: "hidden",
+            borderRadius: "14px",
+            border: "1px solid rgba(255,255,255,0.09)",
+            boxShadow: "0 24px 60px rgba(0,0,0,0.28)",
           }}
         >
           <img
@@ -3283,20 +3363,27 @@ function AboutSection() {
             alt="Michaelle Edwards demonstrating a balance pose outdoors"
             style={{
               width: "100%",
-              height: "auto",
-              maxHeight: "500px",
-              objectFit: "contain",
+              height: "100%",
+              objectFit: "cover",
               display: "block",
-              borderRadius: "4px",
             }}
           />
         </div>
-        {/* Header + Bio + Credentials */}
-        <div>
+        {/* Header + Bio */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            maxWidth: "590px",
+          }}
+        >
           {headerBlock}
           {bioBlock}
-          {credentialsBlock}
         </div>
+      </div>
+      <div style={{ maxWidth: "760px", margin: "48px auto 0" }}>
+        {credentialsBlock}
       </div>
     </Section>
   )
@@ -3334,6 +3421,7 @@ function TestimonialSlider() {
   const [current, setCurrent] = useState(0)
   const [fading, setFading] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const isMobile = useWindowWidth() < 768
 
   const goTo = (index: number) => {
     setFading(true)
@@ -3367,7 +3455,7 @@ function TestimonialSlider() {
     >
       {/* Quote — fixed height so the card never resizes between slides */}
       <div
-        className="overflow-hidden h-[280px] md:h-[200px]"
+        className="overflow-hidden h-[280px] md:h-[220px]"
         style={{
           opacity: fading ? 0 : 1,
           transition: "opacity 0.7s ease",
@@ -3378,7 +3466,7 @@ function TestimonialSlider() {
         <p
           style={{
             color: "rgba(240,236,227,0.65)",
-            fontSize: "15px",
+            fontSize: isMobile ? "15px" : "14.5px",
             lineHeight: 1.75,
             fontStyle: "italic",
             marginBottom: "18px",
@@ -3431,7 +3519,7 @@ function TestimonialSlider() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          marginTop: "20px",
+          marginTop: isMobile ? "20px" : 0,
         }}
       >
         {/* Dots */}
@@ -3622,7 +3710,7 @@ function CoursePricingSection() {
                     style={{
                       display: "flex",
                       gap: "14px",
-                      alignItems: "flex-start",
+                  alignItems: "center",
                     }}
                   >
                     <div
