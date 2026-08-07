@@ -218,6 +218,7 @@ function BeforeAfterPanel({
   mobileImageTopCrop,
   mobileBeforeImageTopCrop,
   mobileImageBottomCrop,
+  mobileBeforeOpacity,
 }: {
   before: string
   after: string
@@ -234,6 +235,7 @@ function BeforeAfterPanel({
   mobileImageTopCrop?: string
   mobileBeforeImageTopCrop?: string
   mobileImageBottomCrop?: string
+  mobileBeforeOpacity?: number
 }) {
   const w = useWindowWidth()
   const isMobile = w < 768
@@ -297,6 +299,7 @@ function BeforeAfterPanel({
                   ? `translateY(${mobileBeforeImageTranslateY ?? mobileImageTranslateY ?? 0}) scale(${mobileImageScale ?? 1})`
                   : undefined,
               transformOrigin: "bottom center",
+              opacity: isMobile ? mobileBeforeOpacity ?? 1 : 1,
               display: "block",
             }}
           />
@@ -620,9 +623,11 @@ export function Nav() {
 function HeroCTA({
   light = false,
   label = "Start FitAlign Online",
+  showArrow = true,
 }: {
   light?: boolean
   label?: string
+  showArrow?: boolean
 }) {
   const [hover, setHover] = useState(false)
   const [pressed, setPressed] = useState(false)
@@ -642,8 +647,8 @@ function HeroCTA({
         alignItems: "center",
         justifyContent: "center",
         gap: light ? "11px" : "12px",
-        padding: light ? "15px 28px" : "16px 40px",
-        border: `1px solid ${
+        padding: light ? "13px 69px" : "16px 40px",
+        border: `${light ? "2px" : "1px"} solid ${
           light
             ? hover || pressed
               ? "rgba(241,220,174,0.72)"
@@ -652,15 +657,13 @@ function HeroCTA({
               ? "rgba(255,255,255,0.2)"
               : "rgba(255,255,255,0.13)"
         }`,
-        borderRadius: light ? "999px" : "12px",
+        borderRadius: light ? "4px" : "12px",
         background: light
-          ? hover || pressed
-            ? "linear-gradient(135deg, #d9bf87 0%, #caa96c 58%, #bc9657 100%)"
-            : "linear-gradient(135deg, #d2b77e 0%, #c5a367 58%, #b99154 100%)"
+          ? "transparent"
           : hover || pressed
             ? "rgba(10,10,14,0.96)"
             : "rgba(10,10,14,0.88)",
-        color: light ? "#0a0a0e" : hover ? "rgba(240,236,227,1)" : "rgba(240,236,227,0.9)",
+        color: light ? "#c9a96e" : hover ? "rgba(240,236,227,1)" : "rgba(240,236,227,0.9)",
         fontSize: "12px",
         fontWeight: light ? 700 : 600,
         letterSpacing: light ? "0.18em" : "0.24em",
@@ -679,7 +682,7 @@ function HeroCTA({
       }}
     >
       {label}
-      <svg
+      {showArrow && <svg
         width="13"
         height="9"
         viewBox="0 0 13 9"
@@ -696,12 +699,261 @@ function HeroCTA({
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-      </svg>
+      </svg>}
     </a>
   )
 }
 
 // ─── HERO ─────────────────────────────────────────────────────────────────────
+
+function LetterReveal({ text }: { text: string }) {
+  const { ref, inView } = useInView(0.25)
+
+  return (
+    <p
+      ref={ref}
+      style={{
+        maxWidth: "340px",
+        margin: "0 auto",
+        fontFamily: "var(--font-display)",
+        fontSize: "clamp(1.2rem, 5vw, 1.35rem)",
+        fontWeight: 500,
+        lineHeight: 1.28,
+        letterSpacing: "-0.025em",
+        color: "rgba(240,236,227,0.94)",
+      }}
+    >
+      <span
+        style={{
+          display: "inline-block",
+          opacity: inView ? 1 : 0,
+          transform: inView ? "translateY(0)" : "translateY(20px)",
+          filter: inView ? "blur(0)" : "blur(7px)",
+          transition: "opacity 750ms ease, transform 900ms cubic-bezier(0.16,1,0.3,1), filter 750ms ease",
+        }}
+      >
+        {text}
+      </span>
+    </p>
+  )
+}
+
+function MobileHeroStory() {
+  const storyRef = useRef<HTMLElement>(null)
+  const pinnedRef = useRef(false)
+  const lockedScrollYRef = useRef<number | null>(null)
+  const proofCountRef = useRef(0)
+  const timersRef = useRef<Array<ReturnType<typeof setTimeout>>>([])
+  const wheelCanTriggerRef = useRef(true)
+  const wheelResetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const touchYRef = useRef<number | null>(null)
+  const touchCanTriggerRef = useRef(true)
+  const [revealedProofCount, setRevealedProofCount] = useState(0)
+  const [released, setReleased] = useState(false)
+
+  useEffect(() => {
+    const section = storyRef.current
+    if (!section) return
+
+    const clearTimers = () => {
+      timersRef.current.forEach(clearTimeout)
+      timersRef.current = []
+    }
+
+    const showCount = (count: number) => {
+      proofCountRef.current = count
+      setRevealedProofCount(count)
+    }
+
+    const releaseAfterAnimation = (delay: number) => {
+      timersRef.current.push(
+        setTimeout(() => {
+          pinnedRef.current = false
+          setReleased(true)
+        }, delay),
+      )
+    }
+
+    const handlePinnedIntent = () => {
+      if (proofCountRef.current >= 3) return
+      const nextCount = proofCountRef.current + 1
+      showCount(nextCount)
+      if (nextCount === 3) releaseAfterAnimation(500)
+    }
+
+    const approachPin = (delta: number) => {
+      const rect = section.getBoundingClientRect()
+      const distanceToPin = rect.top + 150
+      if (delta > 0 && distanceToPin <= Math.max(72, delta * 1.5) && distanceToPin > -2) {
+        const pinY = window.scrollY + Math.max(0, distanceToPin)
+        lockedScrollYRef.current = pinY
+        window.scrollTo({ top: pinY, behavior: "auto" })
+        pinnedRef.current = true
+        return true
+      }
+      if (rect.top <= -148 && rect.bottom > window.innerHeight) {
+        lockedScrollYRef.current = window.scrollY + rect.top + 150
+        pinnedRef.current = true
+      }
+      return false
+    }
+
+    const onScroll = () => {
+      if (released) return
+      const rect = section.getBoundingClientRect()
+      if (!pinnedRef.current && rect.top <= -150 && rect.bottom > window.innerHeight) {
+        const pinY = window.scrollY + rect.top + 150
+        lockedScrollYRef.current = pinY
+        pinnedRef.current = true
+        window.scrollTo({ top: pinY, behavior: "auto" })
+        return
+      }
+      if (pinnedRef.current && lockedScrollYRef.current != null && Math.abs(window.scrollY - lockedScrollYRef.current) > 1) {
+        window.scrollTo({ top: lockedScrollYRef.current, behavior: "auto" })
+      }
+    }
+
+    const onWheel = (event: WheelEvent) => {
+      if (released || event.deltaY <= 0) return
+      if (!pinnedRef.current) {
+        if (approachPin(event.deltaY)) event.preventDefault()
+        return
+      }
+      event.preventDefault()
+      if (wheelCanTriggerRef.current) {
+        wheelCanTriggerRef.current = false
+        handlePinnedIntent()
+      }
+      if (wheelResetTimerRef.current) clearTimeout(wheelResetTimerRef.current)
+      wheelResetTimerRef.current = setTimeout(() => {
+        wheelCanTriggerRef.current = true
+      }, 180)
+    }
+
+    const onTouchStart = (event: TouchEvent) => {
+      touchYRef.current = event.touches[0]?.clientY ?? null
+      touchCanTriggerRef.current = true
+    }
+
+    const onTouchMove = (event: TouchEvent) => {
+      if (released || touchYRef.current == null) return
+      const nextY = event.touches[0]?.clientY ?? touchYRef.current
+      const delta = touchYRef.current - nextY
+      touchYRef.current = nextY
+      if (delta <= 0) return
+      if (!pinnedRef.current) {
+        if (approachPin(delta)) {
+          event.preventDefault()
+          touchCanTriggerRef.current = false
+        }
+        return
+      }
+      event.preventDefault()
+      if (touchCanTriggerRef.current) {
+        touchCanTriggerRef.current = false
+        handlePinnedIntent()
+      }
+    }
+
+    const onTouchEnd = () => {
+      touchYRef.current = null
+      touchCanTriggerRef.current = true
+    }
+
+    window.addEventListener("wheel", onWheel, { passive: false })
+    window.addEventListener("scroll", onScroll, { passive: true })
+    window.addEventListener("touchstart", onTouchStart, { passive: true })
+    window.addEventListener("touchmove", onTouchMove, { passive: false })
+    window.addEventListener("touchend", onTouchEnd, { passive: true })
+    return () => {
+      clearTimers()
+      if (wheelResetTimerRef.current) clearTimeout(wheelResetTimerRef.current)
+      window.removeEventListener("wheel", onWheel)
+      window.removeEventListener("scroll", onScroll)
+      window.removeEventListener("touchstart", onTouchStart)
+      window.removeEventListener("touchmove", onTouchMove)
+      window.removeEventListener("touchend", onTouchEnd)
+    }
+  }, [released])
+
+  return (
+    <section
+      ref={storyRef}
+      style={{
+        height: "calc(100svh + 325px)",
+        padding: "150px 0 175px",
+        boxSizing: "border-box",
+        background:
+          "radial-gradient(ellipse 90% 42% at 50% 22%, rgba(201,169,110,0.08), transparent 68%), #08080c",
+        color: "#f0ece3",
+      }}
+    >
+      <div
+        style={{
+          position: released ? "relative" : "sticky",
+          top: released ? undefined : 0,
+          height: "100svh",
+          padding: "0 28px",
+          overflow: "hidden",
+        }}
+      >
+      <div style={{ paddingTop: "28svh", textAlign: "center" }}>
+          <div
+            aria-hidden="true"
+            style={{
+              width: "36px",
+              height: "1px",
+              margin: "0 auto 28px",
+              background: "linear-gradient(90deg, transparent, #c9a96e, transparent)",
+            }}
+          />
+          <LetterReveal text="From elite performance to lifelong mobility, FitAlign helps people move with more power, ease, and control." />
+      </div>
+
+      <div style={{ marginTop: "12svh" }}>
+          <div
+            style={{
+              maxWidth: "360px",
+              margin: "0 auto",
+              display: "flex",
+              flexDirection: "column",
+              gap: 0,
+            }}
+          >
+            {[
+              "Featured in The New York Times",
+              "500+ Teachers Certified",
+              "Practiced Worldwide",
+            ].map((item, index) => (
+              <div
+                key={item}
+                style={{
+                  textAlign: "center",
+                  padding: "5px 2px",
+                  opacity: index < revealedProofCount ? 1 : 0,
+                  transform: index < revealedProofCount ? "translateY(0)" : "translateY(18px)",
+                  filter: index < revealedProofCount ? "blur(0)" : "blur(5px)",
+                  transition: "opacity 350ms ease, transform 450ms cubic-bezier(0.16,1,0.3,1), filter 350ms ease",
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "'DM Sans', system-ui, sans-serif",
+                    fontSize: "20px",
+                    letterSpacing: "0.025em",
+                    color: "rgba(240,236,227,0.82)",
+                  }}
+                >
+                  {item}
+                </span>
+              </div>
+            ))}
+          </div>
+      </div>
+      </div>
+    </section>
+  )
+}
 
 function Hero() {
   const isMobile = useWindowWidth() < 768
@@ -741,15 +993,16 @@ function Hero() {
         afterAlt="Client A after FitAlign"
         showLabels={false}
         showDivider={false}
-        mobileHeight="clamp(430px, 55vh, 510px)"
+        mobileHeight="clamp(360px, 47vh, 430px)"
         mobileBeforeObjectPosition="44% bottom"
         mobileAfterObjectPosition="52% bottom"
-        mobileImageScale={0.95}
-        mobileImageTranslateY="-45px"
-        mobileBeforeImageTranslateY="-35px"
+        mobileImageScale={1}
+        mobileImageTranslateY="0px"
+        mobileBeforeImageTranslateY="0px"
         mobileImageTopCrop="15px"
         mobileBeforeImageTopCrop="0px"
-        mobileImageBottomCrop="18px"
+        mobileImageBottomCrop="0px"
+        mobileBeforeOpacity={0.93}
       />
     </div>
   )
@@ -764,7 +1017,7 @@ function Hero() {
           flexDirection: "column",
           background: "#06060a",
           overflow: "hidden",
-          padding: isMobile ? "0 0 100px" : 0,
+          padding: isMobile ? "0 0 64px" : 0,
         }}
       >
       {/* Noise texture */}
@@ -833,7 +1086,7 @@ function Hero() {
           width: "100%",
           margin: "0 auto",
           padding: isMobile
-            ? "94px 32px 0"
+            ? "76px 18px 0"
             : "88px clamp(32px, 4vw, 72px) 24px",
           gap: isMobile ? "0" : "clamp(40px, 5vw, 80px)",
           boxSizing: "border-box",
@@ -893,9 +1146,10 @@ function Hero() {
           <h1
             className="hero-intro hero-intro-title"
             style={{
+              display: "block",
               fontFamily: "'DM Sans', system-ui, sans-serif",
               fontSize: isMobile
-                ? "clamp(4.2rem, 18vw, 5.5rem)"
+                ? "clamp(2.9rem, 13vw, 4rem)"
                 : "clamp(7rem, 11vw, 10rem)",
               fontWeight: 800,
               lineHeight: 0.88,
@@ -912,7 +1166,7 @@ function Hero() {
             style={{
               fontFamily: "'DM Sans', system-ui, sans-serif",
               fontSize: isMobile
-                ? "clamp(1.3rem, 5.2vw, 1.65rem)"
+                ? "clamp(1.05rem, 4.5vw, 1.35rem)"
                 : "clamp(1.6rem, 2.1vw, 2rem)",
               fontWeight: 500,
               color: "rgba(240,236,227,0.72)",
@@ -920,7 +1174,7 @@ function Hero() {
               letterSpacing: "-0.01em",
             }}
           >
-            Access your full capacity.
+            Stop working against your body
           </p>
 
           {/* On mobile: transformation goes here between tagline and description */}
@@ -929,24 +1183,20 @@ function Hero() {
               style={{
                 position: "relative",
                 width: "100%",
-                maxWidth: "430px",
-                margin: "8px auto 0",
+                maxWidth: "460px",
+                margin: "6px auto 0",
               }}
             >
               {heroPanel}
               <div
                 style={{
-                  position: "absolute",
-                  left: "50%",
-                  top: "calc(50% + 97px)",
-                  transform: "translate(-50%, -50%)",
-                  zIndex: 3,
                   width: "100%",
                   display: "flex",
                   justifyContent: "center",
+                  marginTop: "15px",
                 }}
               >
-                <HeroCTA light label="Apply Now" />
+                <HeroCTA light label="Apply Now" showArrow={false} />
               </div>
             </div>
           )}
@@ -966,7 +1216,7 @@ function Hero() {
                 }}
               >
                 From elite performance to lifelong mobility, <br />
-                FitAlign helps people move with greater power, <br />
+                FitAlign helps people move with more power, <br />
                 ease, and control.
               </p>
 
@@ -994,21 +1244,22 @@ function Hero() {
       </div>
 
       {/* ════ NYT stats bar ════ */}
+      {!isMobile && (
       <div
         style={{
           position: "relative",
           zIndex: 10,
           width: "100%",
-          marginTop: isMobile ? "-47px" : 0,
-          padding: isMobile ? "0 0 34px" : "0 0 45px",
+          marginTop: isMobile ? "26px" : 0,
+          padding: isMobile ? "0 0 28px" : "0 0 45px",
         }}
       >
         <div
           style={{
             position: "relative",
-            width: isMobile ? "calc(100% - 32px)" : "100%",
-            margin: isMobile ? "0 16px" : 0,
-            borderRadius: isMobile ? "16px" : 0,
+            width: "100%",
+            margin: 0,
+            borderRadius: 0,
             overflow: "hidden",
             boxShadow: isMobile
               ? "0 8px 48px rgba(0,0,0,0.5)"
@@ -1023,7 +1274,7 @@ function Hero() {
               border: isMobile ? "1px solid rgba(255,255,255,0.08)" : undefined,
               borderTop: isMobile ? undefined : "1px solid rgba(255,255,255,0.13)",
               borderBottom: isMobile ? undefined : "1px solid rgba(255,255,255,0.13)",
-              borderRadius: isMobile ? "16px" : 0,
+              borderRadius: 0,
               boxShadow: isMobile
                 ? "inset 0 1px 0 rgba(255,255,255,0.05)"
                 : "0 8px 32px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.07)",
@@ -1118,9 +1369,16 @@ function Hero() {
             preserveAspectRatio="none"
             style={{ animation: "scrollPulse 2.8s ease-in-out infinite" }}
           >
+            <defs>
+              <linearGradient id="scrollArrowGradient" x1="0" y1="0" x2="132" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="rgba(240,236,227,0.14)" />
+                <stop offset="50%" stopColor="rgba(240,236,227,0.82)" />
+                <stop offset="100%" stopColor="rgba(240,236,227,0.14)" />
+              </linearGradient>
+            </defs>
             <path
               d="M3 4L66 32L129 4"
-              stroke="rgba(240,236,227,0.82)"
+              stroke="url(#scrollArrowGradient)"
               strokeWidth={isMobile ? "0.9" : "1.4"}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -1128,8 +1386,11 @@ function Hero() {
           </svg>
         </div>
       </div>
+      )}
 
       </section>
+
+      {isMobile && <MobileHeroStory />}
 
     </>
   )
@@ -1908,6 +2169,7 @@ function FoundationsSection() {
           style={{
             display: "grid",
             gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+            minHeight: isMobile ? undefined : "400px",
             opacity: visible ? 1 : 0,
             transform: visible ? "translateY(0)" : "translateY(8px)",
             transition: "opacity 0.2s ease, transform 0.2s ease",
